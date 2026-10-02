@@ -1,0 +1,12 @@
+{
+  "name": "abhay-harpale-consultation-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "dev:admin": "npm run dev --prefix admin",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:admin": "npm run build --prefix admin",
+    "build": "npm run build:frontend && npm run build:admin"
+  }
+}

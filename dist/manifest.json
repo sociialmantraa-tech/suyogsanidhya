@@ -1,0 +1,33 @@
+{
+  "name": "Abhay Harpale | Relationship & Intimacy Guidance",
+  "short_name": "Abhay Harpale",
+  "description": "Premium relationship and intimacy guidance for individuals and couples seeking deeper communication, trust and meaningful connection.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F6F2E8",
+  "theme_color": "#166D74",
+  "lang": "en-IN",
+  "categories": ["lifestyle", "health", "education"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
