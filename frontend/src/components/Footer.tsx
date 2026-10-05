@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import logoImg from '../assets/logo.png';
 import { Mail, Phone, MapPin, Clock, Linkedin, Twitter, Youtube, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -14,6 +16,8 @@ export default function Footer() {
   const prefersReducedMotion = typeof window !== 'undefined'
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
     : false;
+
+  const logoSrc = typeof logoImg === 'string' ? logoImg : (logoImg as any)?.src || logoImg;
 
   return (
     <footer
@@ -160,7 +164,7 @@ export default function Footer() {
                   Book a private, confidential consultation and take the first step toward deeper connection.
                 </p>
                 <Link
-                  to="/book"
+                  href="/book"
                   className="btn btn-primary inline-flex items-center gap-2"
                 >
                   Book Consultation
@@ -176,8 +180,8 @@ export default function Footer() {
 
           {/* Column 1: Brand Info */}
           <div className="space-y-6">
-            <Link to="/" className="inline-block transition-opacity hover:opacity-85">
-              <img src={logoImg} alt="Suyog Saanidhya" width={64} height={64} className="h-16 w-16 object-contain" />
+            <Link href="/" className="inline-block transition-opacity hover:opacity-85">
+              <img src={logoSrc} alt="Suyog Saanidhya" width={64} height={64} className="h-16 w-16 object-contain" />
             </Link>
             <p className="font-sans leading-relaxed" style={{ fontSize: '14px', color: '#5F6C72', maxWidth: '240px' }}>
               Confidential relationship and intimacy guidance for individuals and couples seeking deeper connection and lasting change.
@@ -218,16 +222,16 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3.5">
               {[
-                { to: '/about', label: 'About Abhay Harpale' },
-                { to: '/services', label: 'Consultation Programs' },
-                { to: '/testimonials', label: 'Client Testimonials' },
-                { to: '/media', label: 'Media & Videos' },
-                { to: '/faq', label: 'Frequently Asked Questions' },
-                { to: '/blog', label: 'Insights & Articles' },
+                { href: '/about', label: 'About Abhay Harpale' },
+                { href: '/services', label: 'Consultation Programs' },
+                { href: '/testimonials', label: 'Client Testimonials' },
+                { href: '/media', label: 'Media & Videos' },
+                { href: '/faq', label: 'Frequently Asked Questions' },
+                { href: '/blog', label: 'Insights & Articles' },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link
-                    to={link.to}
+                    href={link.href}
                     className="animated-link transition-colors duration-300 font-sans"
                     style={{ fontSize: '14px', color: '#5F6C72' }}
                   >
@@ -247,7 +251,7 @@ export default function Footer() {
               {displayServices.map(service => (
                 <li key={service.id}>
                   <Link
-                    to={`/services/${service.slug}`}
+                    href={`/services/${service.slug}`}
                     className="animated-link transition-colors duration-300 font-sans"
                     style={{ fontSize: '14px', color: '#5F6C72' }}
                   >
@@ -257,7 +261,7 @@ export default function Footer() {
               ))}
               <li>
                 <Link
-                  to="/book"
+                  href="/book"
                   className="animated-link font-bold transition-colors font-sans"
                   style={{ fontSize: '14px', color: '#166D74' }}
                 >
@@ -323,13 +327,13 @@ export default function Footer() {
           {/* Legal links */}
           <div className="flex items-center gap-6 flex-wrap justify-center">
             {[
-              { to: '/privacy-policy', label: 'Privacy Policy' },
-              { to: '/terms', label: 'Terms & Conditions' },
-              { to: '/refund-policy', label: 'Refund Policy' },
+              { href: '/privacy-policy', label: 'Privacy Policy' },
+              { href: '/terms', label: 'Terms & Conditions' },
+              { href: '/refund-policy', label: 'Refund Policy' },
             ].map((link, i) => (
               <Link
                 key={i}
-                to={link.to}
+                href={link.href}
                 className="animated-link font-sans text-xs transition-colors"
                 style={{ color: '#88949B' }}
               >

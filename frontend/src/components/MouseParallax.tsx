@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
@@ -8,7 +10,9 @@ interface MouseParallaxProps {
 }
 
 export default function MouseParallax({ children, intensity = 12, className = '' }: MouseParallaxProps) {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = typeof window !== 'undefined'
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
   
   // Motion values for hardware acceleration
   const x = useMotionValue(0);

@@ -1,52 +1,49 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function FloatingParticles() {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false;
 
-  if (prefersReducedMotion) {
-    return null;
-  }
+  if (prefersReducedMotion) return null;
 
-  // Create 15 tiny floating glowing dots with random sizes, delays, and paths
-  const particles = Array.from({ length: 15 }, (_, i) => {
-    const size = Math.random() * 3 + 2; // 2px to 5px
-    return {
-      id: i,
-      size,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      x: [0, Math.random() * 60 - 30, Math.random() * 60 - 30, 0],
-      y: [0, Math.random() * -100 - 50, Math.random() * 60 - 30, 0],
-      duration: Math.random() * 25 + 25, // 25s to 50s
-      delay: Math.random() * -20 // start immediately at random point
-    };
-  });
+  const particles = [
+    { top: '15%', left: '10%', size: 3, duration: 18, delay: 0 },
+    { top: '25%', left: '85%', size: 2, duration: 22, delay: 2 },
+    { top: '45%', left: '18%', size: 4, duration: 16, delay: 1 },
+    { top: '60%', left: '78%', size: 2, duration: 24, delay: 3 },
+    { top: '75%', left: '12%', size: 3, duration: 20, delay: 0.5 },
+    { top: '82%', left: '88%', size: 2, duration: 26, delay: 4 },
+  ];
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-[1]">
-      {particles.map((p) => (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
+      {particles.map((p, idx) => (
         <motion.div
-          key={p.id}
+          key={idx}
           className="absolute rounded-full"
+          style={{
+            top: p.top,
+            left: p.left,
+            width: p.size,
+            height: p.size,
+            backgroundColor: '#C9A646',
+            opacity: 0.35,
+            boxShadow: '0 0 8px rgba(201,166,70,0.6)',
+          }}
           animate={{
-            x: p.x,
-            y: p.y,
-            opacity: [0, 0.4, 0.8, 0.4, 0]
+            y: [-15, 15, -15],
+            opacity: [0.2, 0.5, 0.2],
+            scale: [1, 1.3, 1],
           }}
           transition={{
             duration: p.duration,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: p.delay
-          }}
-          style={{
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            backgroundColor: '#40C0C0', // Brand turquoise
-            boxShadow: '0 0 8px rgba(64, 192, 192, 0.4)',
-            left: p.left,
-            top: p.top,
+            delay: p.delay,
           }}
         />
       ))}

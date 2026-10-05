@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Lock, User, AlertCircle } from 'lucide-react';
 import { adminApi } from '../utils/api';
 
@@ -8,7 +10,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +55,7 @@ export default function Login() {
       if (response && response.token) {
         localStorage.setItem('admin_token', response.token);
         localStorage.setItem('admin_user', JSON.stringify(response.user));
-        navigate('/'); // Redirect to dashboard
+        router.push('/'); // Redirect to dashboard
       } else {
         throw new Error("Invalid credentials supplied.");
       }
@@ -61,7 +63,7 @@ export default function Login() {
       if (isDefaultAdmin) {
         localStorage.setItem('admin_token', 'dev_session_token_' + Date.now());
         localStorage.setItem('admin_user', JSON.stringify({ username: 'admin', email: 'admin@abhayharpale.com', role: 'admin' }));
-        navigate('/');
+        router.push('/');
       } else {
         setError(err.message || "Login failed. Verify your username and password.");
       }

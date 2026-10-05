@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { adminApi } from '../utils/api';
 import { Plus, Trash, Edit, Check } from 'lucide-react';

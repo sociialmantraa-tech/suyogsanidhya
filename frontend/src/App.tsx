@@ -5,24 +5,24 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import RootLayout from './layouts/RootLayout';
 
 // Pages - Lazy loaded
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
-const Services = lazy(() => import('./pages/Services'));
-const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
-const Consultation = lazy(() => import('./pages/Consultation'));
-const Booking = lazy(() => import('./pages/Booking'));
-const Payment = lazy(() => import('./pages/Payment'));
-const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
-const PaymentFailed = lazy(() => import('./pages/PaymentFailed'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogDetail = lazy(() => import('./pages/BlogDetail'));
-const Testimonials = lazy(() => import('./pages/Testimonials'));
-const Media = lazy(() => import('./pages/Media'));
-const FAQ = lazy(() => import('./pages/FAQ'));
-const Contact = lazy(() => import('./pages/Contact'));
-const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
-const Terms = lazy(() => import('./pages/Terms'));
-const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
+const Home = lazy(() => import('./views/Home'));
+const About = lazy(() => import('./views/About'));
+const Services = lazy(() => import('./views/Services'));
+const ServiceDetail = lazy(() => import('./views/ServiceDetail'));
+const Consultation = lazy(() => import('./views/Consultation'));
+const Booking = lazy(() => import('./views/Booking'));
+const Payment = lazy(() => import('./views/Payment'));
+const PaymentSuccess = lazy(() => import('./views/PaymentSuccess'));
+const PaymentFailed = lazy(() => import('./views/PaymentFailed'));
+const Blog = lazy(() => import('./views/Blog'));
+const BlogDetail = lazy(() => import('./views/BlogDetail'));
+const Testimonials = lazy(() => import('./views/Testimonials'));
+const Media = lazy(() => import('./views/Media'));
+const FAQ = lazy(() => import('./views/FAQ'));
+const Contact = lazy(() => import('./views/Contact'));
+const PrivacyPolicy = lazy(() => import('./views/PrivacyPolicy'));
+const Terms = lazy(() => import('./views/Terms'));
+const RefundPolicy = lazy(() => import('./views/RefundPolicy'));
 
 import { PublicDataProvider } from './context/PublicDataContext';
 
@@ -61,7 +61,7 @@ export default function App() {
                 <div className="w-full pt-40 pb-20 text-center space-y-4">
                   <h2 className="font-serif text-3xl">404 - Page Not Found</h2>
                   <p className="text-secondaryText font-sans text-sm">We couldn't find the page you were looking for.</p>
-                  <Link to="/" className="btn-primary py-2 px-6 text-xs inline-block">Back Home</Link>
+                  <Link href="/" className="btn-primary py-2 px-6 text-xs inline-block">Back Home</Link>
                 </div>
               } />
             </Route>

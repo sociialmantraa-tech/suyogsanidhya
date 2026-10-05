@@ -55,7 +55,7 @@ export async function apiFetch<T>(endpoint: string, options: ApiOptions = {}): P
     fetchOptions.signal = controller.signal;
   }
 
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV !== 'production') {
     console.log(`[API Request] ${fetchOptions.method || 'GET'} -> ${url}`);
   }
 
@@ -88,7 +88,7 @@ export async function apiFetch<T>(endpoint: string, options: ApiOptions = {}): P
       throw new ApiError(errMsg, response.status, responseData);
     }
 
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV !== 'production') {
       console.log(`[API Response] Success ->`, responseData);
     }
 
@@ -98,7 +98,7 @@ export async function apiFetch<T>(endpoint: string, options: ApiOptions = {}): P
     if (error.name === 'AbortError') {
       throw new ApiError('Request timed out after 5 seconds', 408, null);
     }
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV !== 'production') {
       console.error(`[API Error] Request failed on [${endpoint}]:`, error);
     }
     throw error;

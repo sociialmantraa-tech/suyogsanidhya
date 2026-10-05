@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { adminApi } from '../utils/api';
 import { Calendar, DollarSign, Activity, CheckCircle, Mail, Clock } from 'lucide-react';

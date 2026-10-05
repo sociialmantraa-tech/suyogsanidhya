@@ -2,12 +2,25 @@
  * Admin API service layer with token headers
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const getApiBase = () => {
+    if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) {
+        return process.env.NEXT_PUBLIC_API_URL;
+    }
+    if (typeof process !== 'undefined' && process.env.VITE_API_URL) {
+        return process.env.VITE_API_URL;
+    }
+    if (typeof window !== 'undefined' && (window.location.port === '3001' || window.location.port === '5174')) {
+        return 'http://localhost/astrologer/api';
+    }
+    return '/api';
+};
+
+const API_BASE = getApiBase();
 
 export async function adminApiFetch(endpoint, options = {}) {
     const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}/${endpoint.replace(/^\//, '')}`;
     
-    const token = localStorage.getItem('admin_token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
     
     const headers = {
         ...options.headers
@@ -19,7 +32,7 @@ export async function adminApiFetch(endpoint, options = {}) {
     }
 
     // Set JSON content type unless handling FormData (file uploads)
-    if (!(options.body instanceof FormData)) {
+    if (typeof FormData !== 'undefined' && !(options.body instanceof FormData)) {
         headers['Content-Type'] = 'application/json';
     }
 
@@ -28,7 +41,7 @@ export async function adminApiFetch(endpoint, options = {}) {
         headers
     };
 
-    if (fetchOptions.body && typeof fetchOptions.body === 'object' && !(fetchOptions.body instanceof FormData)) {
+    if (fetchOptions.body && typeof fetchOptions.body === 'object' && typeof FormData !== 'undefined' && !(fetchOptions.body instanceof FormData)) {
         fetchOptions.body = JSON.stringify(fetchOptions.body);
     }
 
@@ -50,9 +63,11 @@ export async function adminApiFetch(endpoint, options = {}) {
         if (!response.ok) {
             // Handle automatic logout on token expiration
             if (response.status === 401 && !endpoint.includes('auth/login')) {
-                localStorage.removeItem('admin_token');
-                localStorage.removeItem('admin_user');
-                window.location.href = '/login';
+                if (typeof window !== 'undefined') {
+                    localStorage.removeItem('admin_token');
+                    localStorage.removeItem('admin_user');
+                    window.location.href = '/login';
+                }
             }
             throw new Error(data.error || `HTTP error! status: ${response.status}`);
         }

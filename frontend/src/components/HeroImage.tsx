@@ -1,6 +1,10 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import abhayImage from '../assets/abhay.jpg';
+import abhayImg from '../assets/abhay.jpg';
+
+const abhayImage = typeof abhayImg === 'string' ? abhayImg : (abhayImg as any)?.src || abhayImg;
 
 export default function HeroImage() {
   const prefersReducedMotion = typeof window !== 'undefined'

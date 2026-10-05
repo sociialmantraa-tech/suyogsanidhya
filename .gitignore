@@ -16,6 +16,11 @@ pnpm-debug.log*
 .env.*.local
 *.local
 
+# Next.js build output
+.next/
+*/.next/
+**/.next/
+
 # Editor & OS artifacts
 .vscode/*
 !.vscode/extensions.json

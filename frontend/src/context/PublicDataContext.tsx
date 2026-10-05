@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { api } from '../utils/api';
 import { demoServices } from '../data/demoServices';
@@ -91,7 +93,7 @@ export function PublicDataProvider({ children }: ProviderProps): React.ReactNode
         setSiteSettings(fallbackSettings);
 
         // Do not block rendering in development mode
-        if (import.meta.env.PROD) {
+        if (process.env.NODE_ENV === 'production') {
           setError('We’re having trouble loading consultation options right now. Please try again in a moment.');
         }
       } finally {

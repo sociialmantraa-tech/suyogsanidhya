@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import logoImg from '../assets/logo.png';
 import { 
   LayoutDashboard, Calendar, Library, HelpCircle, 
@@ -7,21 +10,23 @@ import {
 } from 'lucide-react';
 import { adminApi } from '../utils/api';
 
-export default function DashboardLayout() {
+export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null);
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const logoSrc = typeof logoImg === 'string' ? logoImg : logoImg?.src || logoImg;
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
     const userData = localStorage.getItem('admin_user');
     
     if (!token || !userData) {
-      navigate('/login');
+      router.push('/login');
     } else {
       setUser(JSON.parse(userData));
     }
-  }, [navigate]);
+  }, [router]);
 
   const handleLogout = async () => {
     try {
@@ -31,13 +36,13 @@ export default function DashboardLayout() {
     } finally {
       localStorage.removeItem('admin_token');
       localStorage.removeItem('admin_user');
-      navigate('/login');
+      router.push('/login');
     }
   };
 
   const isActive = (path) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path);
+    if (path === '/') return pathname === '/';
+    return pathname.startsWith(path);
   };
 
   const navItems = [
@@ -61,7 +66,7 @@ export default function DashboardLayout() {
       <aside className="w-64 bg-gray-950 text-gray-300 flex flex-col justify-between border-r border-gray-800 shrink-0">
         <div>
           <div className="p-4 border-b border-gray-800 flex flex-col items-center">
-            <img src={logoImg} alt="Suyog Saanidhya" className="h-24 object-contain" style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))' }} />
+            <img src={logoSrc} alt="Suyog Saanidhya" className="h-24 object-contain" style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))' }} />
             <span className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Management Desk</span>
           </div>
 
@@ -69,7 +74,7 @@ export default function DashboardLayout() {
             {navItems.map(item => (
               <Link
                 key={item.path}
-                to={item.path}
+                href={item.path}
                 className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all ${
                   isActive(item.path)
                     ? 'bg-darkCyan text-white'
@@ -119,7 +124,7 @@ export default function DashboardLayout() {
 
         {/* Panel content outlet */}
         <main className="p-8 flex-grow">
-          <Outlet />
+          {children}
         </main>
       </div>
 

@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useRef, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
@@ -8,6 +10,7 @@ interface ButtonProps {
   variant?: 'primary' | 'outline' | 'secondary' | 'white';
   showArrow?: boolean;
   to?: string;
+  href?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
   className?: string;
   style?: React.CSSProperties;
@@ -20,6 +23,7 @@ export default function Button({
   variant = 'primary',
   showArrow = false,
   to,
+  href,
   onClick,
   className = '',
   style,
@@ -152,8 +156,9 @@ export default function Button({
   );
 
   const baseClasses = `btn transition-all duration-300 relative overflow-hidden select-none group`;
+  const destination = href || to;
 
-  if (to) {
+  if (destination) {
     return (
       <motion.div
         className="inline-block"
@@ -165,7 +170,7 @@ export default function Button({
         ref={btnRef as React.RefObject<HTMLDivElement>}
       >
         <Link
-          to={to}
+          href={destination}
           onClick={(e) => {
             handleRipple(e as unknown as React.MouseEvent<HTMLElement>);
             if (onClick) onClick(e as unknown as React.MouseEvent<HTMLAnchorElement>);

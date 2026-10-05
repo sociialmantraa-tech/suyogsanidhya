@@ -1,6 +1,9 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import logoImg from '../assets/logo.png';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePublicData } from '../context/PublicDataContext';
@@ -11,7 +14,9 @@ export default function Header() {
   const { services } = usePublicData();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();
+  const pathname = usePathname();
+
+  const logoSrc = typeof logoImg === 'string' ? logoImg : (logoImg as any)?.src || logoImg;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,7 +60,7 @@ export default function Header() {
       closeTimer.current = null;
     }
     document.body.style.overflow = '';
-  }, [location]);
+  }, [pathname]);
 
   // Click outside and Escape key listeners
   useEffect(() => {
@@ -84,16 +89,17 @@ export default function Header() {
   };
 
   const isActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path);
+    if (!pathname) return false;
+    if (path === '/') return pathname === '/';
+    return pathname.startsWith(path);
   };
 
   const navLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/about', label: 'About' },
-    { to: '/blog', label: 'Blog' },
-    { to: '/testimonials', label: 'Testimonials' },
-    { to: '/contact', label: 'Contact' },
+    { href: '/', label: 'Home' },
+    { href: '/about', label: 'About' },
+    { href: '/blog', label: 'Blog' },
+    { href: '/testimonials', label: 'Testimonials' },
+    { href: '/contact', label: 'Contact' },
   ];
 
   return (
@@ -126,9 +132,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
 
         {/* Brand Logo */}
-        <Link to="/" className="focus:outline-none flex items-center" aria-label="Abhay Harpale — Home">
+        <Link href="/" className="focus:outline-none flex items-center" aria-label="Abhay Harpale — Home">
           <motion.img
-            src={logoImg}
+            src={logoSrc}
             alt="Suyog Saanidhya"
             width={isScrolled ? 44 : 52}
             height={isScrolled ? 44 : 52}
@@ -143,15 +149,15 @@ export default function Header() {
         <nav className="hidden lg:flex items-center space-x-9 desktop-nav">
           {navLinks.map((link, i) => (
             <motion.div
-              key={link.to}
+              key={link.href}
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <Link
-                to={link.to}
-                className={`animated-link font-sans text-[13px] font-semibold tracking-[0.04em] transition-colors duration-250 ${isActive(link.to) ? 'active' : ''}`}
-                style={{ color: isActive(link.to) ? '#166D74' : '#5E6E72' }}
+                href={link.href}
+                className={`animated-link font-sans text-[13px] font-semibold tracking-[0.04em] transition-colors duration-250 ${isActive(link.href) ? 'active' : ''}`}
+                style={{ color: isActive(link.href) ? '#166D74' : '#5E6E72' }}
               >
                 {link.label}
               </Link>
@@ -229,7 +235,7 @@ export default function Header() {
                           .map(service => (
                             <Link
                               key={service.id}
-                              to={`/services/${service.slug}`}
+                              href={`/services/${service.slug}`}
                               className="mega-menu-link animated-link py-1.5 px-2 rounded-lg transition-all font-sans text-sm font-medium"
                               style={{ color: '#5E6E72' }}
                             >
@@ -249,7 +255,7 @@ export default function Header() {
                           .map(service => (
                             <Link
                               key={service.id}
-                              to={`/services/${service.slug}`}
+                              href={`/services/${service.slug}`}
                               className="mega-menu-link animated-link py-1.5 px-2 rounded-lg transition-all font-sans text-sm font-medium"
                               style={{ color: '#5E6E72' }}
                             >
@@ -264,7 +270,7 @@ export default function Header() {
                           Confidential · Personalized · Private
                         </span>
                         <Link
-                          to="/services"
+                          href="/services"
                           className="animated-link font-sans text-[11px] font-bold uppercase tracking-wider transition-all"
                           style={{ color: '#166D74' }}
                         >
@@ -286,7 +292,7 @@ export default function Header() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Link to="/book" className="btn btn-primary">
+          <Link href="/book" className="btn btn-primary">
             Book Consultation
           </Link>
         </motion.div>
@@ -329,15 +335,15 @@ export default function Header() {
             <div className="p-8 flex flex-col space-y-6 overflow-y-auto max-h-[70vh]">
               {navLinks.map((link, i) => (
                 <motion.div
-                  key={link.to}
+                  key={link.href}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Link
-                    to={link.to}
+                    href={link.href}
                     className="font-serif text-2xl block"
-                    style={{ color: isActive(link.to) ? '#166D74' : '#176F78' }}
+                    style={{ color: isActive(link.href) ? '#166D74' : '#176F78' }}
                   >
                     {link.label}
                   </Link>
@@ -355,13 +361,13 @@ export default function Header() {
                   Consultations &amp; Services
                 </span>
                 <div className="flex flex-col space-y-3 pl-3">
-                  <Link to="/services" className="font-sans text-lg hover:text-[#166D74] transition-colors" style={{ color: '#176F78' }}>
+                  <Link href="/services" className="font-sans text-lg hover:text-[#166D74] transition-colors" style={{ color: '#176F78' }}>
                     All Offerings
                   </Link>
                   {services.map(service => (
                     <Link
                       key={service.id}
-                      to={`/services/${service.slug}`}
+                      href={`/services/${service.slug}`}
                       className="font-sans text-base hover:text-[#166D74] transition-colors"
                       style={{ color: '#5E6E72' }}
                     >
@@ -374,7 +380,7 @@ export default function Header() {
 
             {/* Drawer Bottom CTA */}
             <div className="p-8 flex flex-col gap-4" style={{ backgroundColor: '#FFFCF8', borderTop: '1px solid rgba(64,192,192,0.1)' }}>
-              <Link to="/book" className="btn btn-primary w-full text-center py-4">
+              <Link href="/book" className="btn btn-primary w-full text-center py-4">
                 Book Consultation
               </Link>
               <p className="text-xs text-center" style={{ color: '#88949B' }}>
