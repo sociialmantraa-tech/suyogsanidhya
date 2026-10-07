@@ -111,57 +111,59 @@ export default function Header() {
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={isScrolled ? {
-        backgroundColor: 'rgba(255, 255, 252, 0.92)',
+        backgroundColor: 'rgba(255, 255, 252, 0.94)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(22, 109, 116, 0.08)',
-        boxShadow: '0 8px 32px -4px rgba(22, 109, 116, 0.06)',
+        boxShadow: '0 8px 30px -4px rgba(22, 109, 116, 0.06)',
         paddingTop: '0.45rem',
         paddingBottom: '0.45rem',
       } : {
-        backgroundColor: 'rgba(255, 255, 252, 0.85)',
-        backdropFilter: 'blur(14px)',
-        WebkitBackdropFilter: 'blur(14px)',
+        backgroundColor: 'rgba(255, 255, 252, 0.86)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(22, 109, 116, 0.04)',
+        boxShadow: '0 2px 20px -2px rgba(22, 109, 116, 0.03)',
         paddingTop: '0.75rem',
         paddingBottom: '0.75rem',
       }}
     >
-      {/* Top subtle sage-gold gradient line */}
+      {/* Top subtle sage-gold radiant line */}
       <div
-        className={`absolute top-0 left-0 right-0 h-[1.5px] transition-opacity duration-300 pointer-events-none ${isScrolled ? 'opacity-100' : 'opacity-40'}`}
+        className={`absolute top-0 left-0 right-0 h-[2px] transition-opacity duration-300 pointer-events-none ${isScrolled ? 'opacity-100' : 'opacity-70'}`}
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(22,109,116,0.3) 25%, rgba(201,166,70,0.5) 50%, rgba(22,109,116,0.3) 75%, transparent 100%)',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(22,109,116,0.2) 20%, rgba(201,166,70,0.65) 50%, rgba(22,109,116,0.2) 80%, transparent 100%)',
         }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
 
-        {/* Brand Logo - Original High-Resolution Logo with Increased Prominent Size */}
+        {/* Brand Logo - Original High-Resolution Logo with Prominent Presentation */}
         <Link href="/" className="focus:outline-none flex items-center py-1 group shrink-0" aria-label="Suyog Saanidhya — Home">
           <motion.div
             className="relative flex items-center"
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.015 }}
             transition={{ duration: 0.15 }}
           >
             <img
               src={logoSrc}
               alt="Suyog Saanidhya — Where Hearts Find Harmony"
-              className="object-contain transition-all duration-300 h-[58px] sm:h-[76px] md:h-[96px]"
+              className="object-contain transition-all duration-300 h-[58px] sm:h-[76px] md:h-[94px]"
               style={{
-                height: isScrolled ? '72px' : '96px',
-                maxHeight: isScrolled ? '72px' : '96px',
+                height: isScrolled ? '70px' : '94px',
+                maxHeight: isScrolled ? '70px' : '94px',
                 width: 'auto',
                 maxWidth: isScrolled ? '360px' : '480px',
                 display: 'block',
                 imageRendering: '-webkit-optimize-contrast',
-                filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.08))'
+                filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.06))'
               }}
             />
           </motion.div>
         </Link>
 
-        {/* Desktop Navigation - Clean, Borderless & Elegant */}
-        <nav className="hidden md:flex items-center space-x-2 lg:space-x-6">
+        {/* Desktop Navigation - Clean, Borderless, Luxurious & Refined */}
+        <nav className="hidden md:flex items-center space-x-1 lg:space-x-3">
           {navLinks.map((link, i) => {
             const active = isActive(link.href);
             return (
@@ -169,22 +171,35 @@ export default function Header() {
                 key={link.href}
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="relative py-1"
+                transition={{ delay: i * 0.04, duration: 0.35 }}
+                className="relative"
               >
                 <Link
                   href={link.href}
-                  className={`relative px-3 py-1.5 font-sans text-[14px] lg:text-[15px] tracking-normal transition-all duration-200 block ${
-                    active ? 'text-[#0F5D66] font-bold' : 'text-[#3E5358] hover:text-[#0F5D66] font-medium'
+                  className={`relative px-4 py-2 font-sans text-[14.5px] lg:text-[15px] tracking-[0.01em] transition-all duration-200 block group/link ${
+                    active
+                      ? 'text-[#0F5D66] font-bold'
+                      : 'text-[#485C61] hover:text-[#0F5D66] font-medium'
                   }`}
                 >
-                  {link.label}
+                  <span className="relative z-10">{link.label}</span>
+
+                  {/* Active Gradient Underline Bar with Warm Golden Tip */}
                   {active && (
                     <motion.div
-                      layoutId="nav-underline"
-                      className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#166D74] rounded-full"
-                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                      layoutId="nav-active-glow"
+                      className="absolute bottom-0 left-3.5 right-3.5 h-[2.5px] rounded-full"
+                      style={{
+                        background: 'linear-gradient(90deg, #166D74 0%, #C9A646 50%, #166D74 100%)',
+                        boxShadow: '0 2px 8px rgba(22, 109, 116, 0.25)',
+                      }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
+                  )}
+
+                  {/* Hover subtle glow dot */}
+                  {!active && (
+                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#166D74] opacity-0 group-hover/link:opacity-60 transition-opacity duration-200" />
                   )}
                 </Link>
               </motion.div>
@@ -197,18 +212,18 @@ export default function Header() {
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
+            transition={{ delay: 0.25, duration: 0.4 }}
           >
             <Link
               href="/book"
-              className="relative inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-sans text-[13px] font-semibold tracking-wide text-white overflow-hidden shadow-[0_4px_16px_rgba(22,109,116,0.25)] hover:shadow-[0_6px_22px_rgba(22,109,116,0.35)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              className="relative inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-sans text-[13.5px] font-semibold tracking-wide text-white overflow-hidden shadow-[0_4px_16px_rgba(22,109,116,0.25)] hover:shadow-[0_8px_25px_rgba(22,109,116,0.38)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-[#C9A646]/30 group"
               style={{
-                background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
+                background: 'linear-gradient(135deg, #166D74 0%, #0D4E55 100%)',
               }}
             >
-              <span className="absolute inset-0 bg-white/15 opacity-0 hover:opacity-100 transition-opacity pointer-events-none" />
+              <span className="absolute inset-0 bg-white/15 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               <span>Book Consultation</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 text-[#EAF5F3]" />
             </Link>
           </motion.div>
         </div>
