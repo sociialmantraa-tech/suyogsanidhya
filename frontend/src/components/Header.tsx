@@ -160,8 +160,8 @@ export default function Header() {
           </motion.div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-1 bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-[rgba(22,109,116,0.1)] shadow-sm">
+        {/* Desktop Navigation - Clean, Borderless & Elegant */}
+        <nav className="hidden md:flex items-center space-x-2 lg:space-x-6">
           {navLinks.map((link, i) => {
             const active = isActive(link.href);
             return (
@@ -170,22 +170,22 @@ export default function Header() {
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="relative"
+                className="relative py-1"
               >
                 <Link
                   href={link.href}
-                  className={`relative px-4 py-2 rounded-full font-sans text-[13px] font-medium tracking-[0.02em] transition-all duration-300 block ${
-                    active ? 'text-[#0F5D66] font-semibold' : 'text-[#4A5D62] hover:text-[#0F5D66]'
+                  className={`relative px-3 py-1.5 font-sans text-[14px] lg:text-[15px] tracking-normal transition-all duration-200 block ${
+                    active ? 'text-[#0F5D66] font-bold' : 'text-[#3E5358] hover:text-[#0F5D66] font-medium'
                   }`}
                 >
+                  {link.label}
                   {active && (
                     <motion.div
-                      layoutId="nav-pill"
-                      className="absolute inset-0 bg-[#EAF5F3] rounded-full -z-10 border border-[#D0EAE4]"
+                      layoutId="nav-underline"
+                      className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#166D74] rounded-full"
                       transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     />
                   )}
-                  {link.label}
                 </Link>
               </motion.div>
             );
