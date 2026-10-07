@@ -4,7 +4,6 @@ import { PublicDataProvider } from '../context/PublicDataContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import WhatsAppFloating from '../components/WhatsAppFloating';
-import CursorGlow from '../components/CursorGlow';
 
 export const metadata: Metadata = {
   title: 'Abhay Harpale — Relationship & Intimacy Consultant',
@@ -30,12 +29,11 @@ export default function RootLayout({
         <PublicDataProvider>
           <div className="flex flex-col min-h-screen relative">
             <Header />
-            <main className="flex-grow overflow-hidden pt-20 lg:pt-24">
+            <main className="flex-grow overflow-hidden pt-24 lg:pt-28">
               {children}
             </main>
             <Footer />
             <WhatsAppFloating />
-            <CursorGlow />
           </div>
         </PublicDataProvider>
       </body>

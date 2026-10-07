@@ -100,11 +100,11 @@ export default function BlogDetail() {
         
         {/* Navigation back */}
         <Link 
-          href="/blog" 
-          className="animated-link font-sans text-xs uppercase tracking-widest font-bold flex items-center gap-1.5"
+          href="/stories" 
+          className="animated-link font-sans text-xs uppercase tracking-widest font-bold flex items-center gap-1.5 hover:text-[#0F5D66] transition-colors"
           style={{ color: '#166D74' }}
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Publications
+          <ArrowLeft className="w-4 h-4" /> Back to Stories
         </Link>
 
         {/* Title block */}

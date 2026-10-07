@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import logoImg from '../assets/logo.png';
-import { Mail, Phone, MapPin, Clock, Linkedin, Twitter, Youtube, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Linkedin, Twitter, Youtube, ArrowRight, Sparkles, Heart, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { usePublicData } from '../context/PublicDataContext';
 import MandalaPattern from './MandalaPattern';
@@ -23,151 +23,98 @@ export default function Footer() {
     <footer
       className="relative overflow-hidden"
       style={{
-        backgroundColor: '#F6F2E8',
-        borderTop: '1px solid rgba(201,166,70,0.2)',
+        backgroundColor: '#F7FAF9',
+        borderTop: '1px solid rgba(22, 109, 116, 0.1)',
       }}
     >
       {/* ── Background Layer 1: Ambient Mesh Gradient ── */}
-      <div className="absolute inset-0 pointer-events-none opacity-25">
+      <div className="absolute inset-0 pointer-events-none opacity-40">
         <MeshGradient />
       </div>
 
-      {/* ── Background Layer 2: Lattice Grid Pattern ── */}
+      {/* ── Background Layer 2: Subtle Geometry ── */}
       <MandalaPattern
         type="lattice"
         className="absolute inset-0 w-full h-full text-[#166D74]"
-        opacity={0.025}
+        opacity={0.018}
       />
 
-      {/* ── Background Layer 3: Central Sacred Geometry ── */}
       <MandalaPattern
         type="sacred"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] text-[#C9A646]"
-        opacity={0.025}
-        animateRotation={!prefersReducedMotion}
-      />
-
-      {/* ── Background Layer 4: Corner Mandala (bottom left) ── */}
-      <MandalaPattern
-        type="mandala"
-        className="absolute -left-24 -bottom-24 w-[500px] h-[500px] text-[#166D74]"
+        className="absolute -right-24 -bottom-24 w-[500px] h-[500px] text-[#C9A646]"
         opacity={0.02}
         animateRotation={!prefersReducedMotion}
       />
 
-      {/* ── Background Layer 5: Corner geometry (bottom right) ── */}
-      <MandalaPattern
-        type="geometry"
-        className="absolute -right-20 -bottom-20 w-[380px] h-[380px] text-[#C9A646]"
-        opacity={0.025}
-        animateRotation={!prefersReducedMotion}
-      />
-
-      {/* ── Background Layer 6: Soft radial glow ── */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: '-30%', left: '30%',
-          width: '60%', height: '120%',
-          background: 'radial-gradient(ellipse, rgba(201,166,70,0.05) 0%, rgba(64,192,192,0.03) 40%, transparent 70%)',
-          filter: 'blur(80px)',
-        }}
-      />
-
-      {/* ── Gold Top Divider Line ── */}
+      {/* ── Gold / Sage Top Divider Accent ── */}
       <div
         className="absolute top-0 left-0 right-0 h-[1.5px]"
         style={{
-          background: 'linear-gradient(to right, transparent, rgba(201,166,70,0.5) 25%, rgba(201,166,70,0.5) 75%, transparent)',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(22,109,116,0.3) 25%, rgba(201,166,70,0.5) 50%, rgba(22,109,116,0.3) 75%, transparent 100%)',
         }}
       />
-      <div
-        className="absolute top-0 left-0 right-0 h-6 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(201,166,70,0.06), transparent)',
-        }}
-      />
-
-      {/* ── Corner Ornaments ── */}
-      <div className="absolute top-6 left-6 w-10 h-10 opacity-20 text-[#C9A646] pointer-events-none z-10">
-        <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" strokeWidth="1.2">
-          <path d="M0 0 L30 0 M0 0 L0 30" />
-          <circle cx="8" cy="8" r="2.5" />
-        </svg>
-      </div>
-      <div className="absolute top-6 right-6 w-10 h-10 opacity-20 text-[#C9A646] pointer-events-none z-10" style={{ transform: 'rotate(90deg)' }}>
-        <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" strokeWidth="1.2">
-          <path d="M0 0 L30 0 M0 0 L0 30" />
-          <circle cx="8" cy="8" r="2.5" />
-        </svg>
-      </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
 
-        {/* ══ BRAND STATEMENT SECTION ══ */}
-        <div className="pt-20 pb-16 border-b" style={{ borderColor: 'rgba(64,192,192,0.12)' }}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        {/* ══ TOP BRAND & INVITATION SECTION ══ */}
+        <div className="pt-20 pb-14 border-b border-[rgba(22,109,116,0.08)]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
-            {/* Left — Brand statement */}
-            <div className="lg:col-span-7 space-y-6">
-              <motion.span
-                className="eyebrow"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              >
-                Abhay Harpale
-              </motion.span>
-              <motion.p
-                className="footer-brand-statement"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                Where Relationships<br />
-                <span style={{ color: '#C9A646' }}>Become Art.</span>
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <p className="sanskrit-text text-xl mb-1">संवादात् सान्निध्यम्</p>
-                <p className="sanskrit-caption">From communication comes true closeness.</p>
-              </motion.div>
+            {/* Left Brand Statement */}
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#D0EAE4] shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#B8943A]" />
+                <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#166D74]">
+                  Abhay Harpale · Suyog Saanidhya
+                </span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#0F5D66] font-normal leading-[1.15] tracking-tight">
+                Where Relationships <br className="hidden sm:inline" />
+                <span className="italic font-light text-[#B8943A]">Awaken to Harmony.</span>
+              </h2>
+              <div className="pt-2">
+                <p className="font-serif italic text-lg text-[#166D74] mb-0.5">संवादात् सान्निध्यम्</p>
+                <p className="font-sans text-xs tracking-wider text-[#71858A] uppercase">
+                  From conscious dialogue emerges enduring connection.
+                </p>
+              </div>
             </div>
 
-            {/* Right — Book CTA */}
+            {/* Right Consultation Card */}
             <motion.div
               className="lg:col-span-5"
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.6 }}
             >
               <div
-                className="footer-cta-section"
+                className="p-8 rounded-3xl relative overflow-hidden backdrop-blur-md shadow-[0_12px_40px_-10px_rgba(22,109,116,0.08)]"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(22,109,116,0.04) 0%, rgba(201,166,70,0.03) 100%)',
-                  border: '1px solid rgba(201,166,70,0.18)',
-                  borderRadius: '20px',
-                  padding: '2rem 2rem',
+                  backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                  border: '1px solid rgba(22, 109, 116, 0.12)',
                 }}
               >
-                <h4 className="font-serif text-xl mb-2" style={{ color: '#166D74' }}>
-                  Ready to Begin?
-                </h4>
-                <p className="font-sans text-sm leading-relaxed mb-5" style={{ color: '#5F6C72', maxWidth: '340px' }}>
-                  Book a private, confidential consultation and take the first step toward deeper connection.
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#166D74]">
+                    Private Consultations Available
+                  </span>
+                </div>
+                <h3 className="font-serif text-2xl text-[#0F5D66] mb-2 font-medium">
+                  Ready for Meaningful Clarity?
+                </h3>
+                <p className="font-sans text-sm text-[#5E6E72] leading-relaxed mb-6">
+                  Schedule a private 1-on-1 or couples session crafted to restore mutual understanding and intimacy.
                 </p>
                 <Link
                   href="/book"
-                  className="btn btn-primary inline-flex items-center gap-2"
+                  className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-full font-sans text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.01]"
+                  style={{
+                    background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
+                  }}
                 >
-                  Book Consultation
+                  <span>Begin Your Journey</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -175,18 +122,31 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ══ MAIN FOOTER COLUMNS ══ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 py-16 mb-2 text-left">
+        {/* ══ MAIN FOOTER LINKS ══ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 py-16 text-left">
 
-          {/* Column 1: Brand Info */}
-          <div className="space-y-6">
-            <Link href="/" className="inline-block transition-opacity hover:opacity-85">
-              <img src={logoSrc} alt="Suyog Saanidhya" width={64} height={64} className="h-16 w-16 object-contain" />
+          {/* Column 1: Brand & Bio (4 cols) */}
+          <div className="lg:col-span-4 space-y-5">
+            <Link href="/" className="inline-flex items-center group py-1" aria-label="Suyog Saanidhya — Home">
+              <img 
+                src={logoSrc} 
+                alt="Suyog Saanidhya — Where Hearts Find Harmony" 
+                className="object-contain transition-transform duration-300 group-hover:scale-[1.02] h-[75px] sm:h-[95px] md:h-[110px]" 
+                style={{
+                  height: '110px',
+                  maxHeight: '110px',
+                  width: 'auto',
+                  maxWidth: '480px',
+                  display: 'block',
+                  imageRendering: '-webkit-optimize-contrast',
+                  filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.08))'
+                }}
+              />
             </Link>
-            <p className="font-sans leading-relaxed" style={{ fontSize: '14px', color: '#5F6C72', maxWidth: '240px' }}>
-              Confidential relationship and intimacy guidance for individuals and couples seeking deeper connection and lasting change.
+            <p className="font-sans text-sm leading-relaxed text-[#5E6E72] max-w-sm">
+              Empowering individuals and couples through compassionate, confidential guidance rooted in ancient wisdom and modern relational science.
             </p>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2.5 pt-2">
               {[
                 { href: settings.social_linkedin, label: 'LinkedIn', icon: <Linkedin className="w-4 h-4" /> },
                 { href: settings.social_twitter, label: 'Twitter', icon: <Twitter className="w-4 h-4" /> },
@@ -194,19 +154,12 @@ export default function Footer() {
               ].map((soc, idx) => (
                 <motion.a
                   key={idx}
-                  href={soc.href}
+                  href={soc.href || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-full border flex items-center justify-center bg-white"
-                  style={{ borderColor: 'rgba(201,166,70,0.2)', color: '#166D74' }}
-                  whileHover={prefersReducedMotion ? {} : {
-                    y: -4,
-                    backgroundColor: '#FFFDF7',
-                    borderColor: '#C9A646',
-                    color: '#C9A646',
-                    boxShadow: '0 8px 20px rgba(201,166,70,0.15)',
-                  }}
-                  whileTap={{ scale: 0.94 }}
+                  className="w-9 h-9 rounded-full border border-[rgba(22,109,116,0.15)] flex items-center justify-center bg-white/90 text-[#166D74] transition-all hover:bg-[#166D74] hover:text-white hover:border-[#166D74] shadow-xs"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.95 }}
                   aria-label={soc.label}
                 >
                   {soc.icon}
@@ -215,131 +168,124 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
-          <div>
-            <h4 className="font-sans text-[10.5px] uppercase tracking-wider font-bold mb-6" style={{ color: '#C9A646' }}>
+          {/* Column 2: Quick Links (2 cols) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="font-sans text-xs uppercase tracking-widest font-bold text-[#166D74]">
               Explore
             </h4>
-            <ul className="space-y-3.5">
+            <ul className="space-y-2.5">
               {[
-                { href: '/about', label: 'About Abhay Harpale' },
-                { href: '/services', label: 'Consultation Programs' },
-                { href: '/testimonials', label: 'Client Testimonials' },
+                { href: '/about', label: 'About Abhay' },
+                { href: '/services', label: 'Consultations' },
+                { href: '/testimonials', label: 'Client Stories' },
+                { href: '/blog', label: 'Insights & Blog' },
                 { href: '/media', label: 'Media & Videos' },
-                { href: '/faq', label: 'Frequently Asked Questions' },
-                { href: '/blog', label: 'Insights & Articles' },
+                { href: '/faq', label: 'FAQ' },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link
                     href={link.href}
-                    className="animated-link transition-colors duration-300 font-sans"
-                    style={{ fontSize: '14px', color: '#5F6C72' }}
+                    className="font-sans text-sm text-[#5E6E72] hover:text-[#0F5D66] transition-colors flex items-center gap-1.5 group"
                   >
-                    {link.label}
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#166D74] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span>{link.label}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3: Programs */}
-          <div>
-            <h4 className="font-sans text-[10.5px] uppercase tracking-wider font-bold mb-6" style={{ color: '#C9A646' }}>
-              Programs
+          {/* Column 3: Offerings (3 cols) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="font-sans text-xs uppercase tracking-widest font-bold text-[#166D74]">
+              Specialized Guidance
             </h4>
-            <ul className="space-y-3.5">
+            <ul className="space-y-2.5">
               {displayServices.map(service => (
                 <li key={service.id}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="animated-link transition-colors duration-300 font-sans"
-                    style={{ fontSize: '14px', color: '#5F6C72' }}
+                    className="font-sans text-sm text-[#5E6E72] hover:text-[#0F5D66] transition-colors line-clamp-1"
                   >
                     {service.title}
                   </Link>
                 </li>
               ))}
-              <li>
+              <li className="pt-1">
                 <Link
-                  href="/book"
-                  className="animated-link font-bold transition-colors font-sans"
-                  style={{ fontSize: '14px', color: '#166D74' }}
+                  href="/services"
+                  className="font-sans text-xs font-bold uppercase tracking-wider text-[#B8943A] hover:text-[#0F5D66] flex items-center gap-1 transition-colors"
                 >
-                  Schedule a Session →
+                  View All Services →
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Contact */}
-          <div>
-            <h4 className="font-sans text-[10.5px] uppercase tracking-wider font-bold mb-6" style={{ color: '#C9A646' }}>
-              Contact
+          {/* Column 4: Contact Info (3 cols) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="font-sans text-xs uppercase tracking-widest font-bold text-[#166D74]">
+              Reach Out
             </h4>
-            <ul className="space-y-4" style={{ color: '#5F6C72' }}>
+            <ul className="space-y-3.5 text-sm text-[#5E6E72]">
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#40C0C0' }} />
-                <span className="font-sans" style={{ fontSize: '14px' }}>{settings.contact_address}</span>
+                <div className="p-1.5 rounded-lg bg-[#EAF5F3] text-[#166D74] shrink-0 mt-0.5">
+                  <MapPin className="w-3.5 h-3.5" />
+                </div>
+                <span className="leading-snug">{settings.contact_address || 'Pune / Mumbai, Maharashtra, India'}</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 shrink-0" style={{ color: '#40C0C0' }} />
+                <div className="p-1.5 rounded-lg bg-[#EAF5F3] text-[#166D74] shrink-0">
+                  <Phone className="w-3.5 h-3.5" />
+                </div>
                 <a
-                  href={`tel:${settings.contact_phone}`}
-                  className="animated-link transition-colors font-sans"
-                  style={{ fontSize: '14px', color: '#5F6C72' }}
+                  href={`tel:${settings.contact_phone || '+91 91529 62255'}`}
+                  className="hover:text-[#0F5D66] transition-colors"
                 >
-                  {settings.contact_phone}
+                  {settings.contact_phone || '+91 91529 62255'}
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 shrink-0" style={{ color: '#40C0C0' }} />
+                <div className="p-1.5 rounded-lg bg-[#EAF5F3] text-[#166D74] shrink-0">
+                  <Mail className="w-3.5 h-3.5" />
+                </div>
                 <a
                   href={`mailto:${settings.contact_email}`}
-                  className="animated-link transition-colors font-sans"
-                  style={{ fontSize: '14px', color: '#5F6C72' }}
+                  className="hover:text-[#0F5D66] transition-colors break-all"
                 >
-                  {settings.contact_email}
+                  {settings.contact_email || 'consult@abhayharpale.com'}
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <Clock className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#40C0C0' }} />
-                <span className="font-sans" style={{ fontSize: '14px' }}>{settings.business_hours}</span>
+                <div className="p-1.5 rounded-lg bg-[#EAF5F3] text-[#166D74] shrink-0 mt-0.5">
+                  <Clock className="w-3.5 h-3.5" />
+                </div>
+                <span>{settings.business_hours || 'Mon – Sat: 10:00 AM – 7:00 PM IST'}</span>
               </li>
             </ul>
           </div>
+
         </div>
 
-        {/* ══ BOTTOM BAR ══ */}
-        <div
-          className="py-8 border-t flex flex-col md:flex-row items-center justify-between gap-5"
-          style={{ borderColor: 'rgba(64,192,192,0.1)' }}
-        >
-          {/* Copyright + Sanskrit */}
-          <div className="flex flex-col items-center md:items-start gap-1">
-            <p className="font-sans text-xs" style={{ color: '#88949B' }}>
-              © {new Date().getFullYear()} Abhay Harpale. All rights reserved.
-            </p>
-            <p className="sanskrit-text" style={{ fontSize: '12px' }}>
-              संबन्धात् सम्पूर्णता — Wholeness through relationships.
-            </p>
+        {/* ══ BOTTOM COPYRIGHT BAR ══ */}
+        <div className="py-7 border-t border-[rgba(22,109,116,0.08)] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs text-[#71858A] font-sans">
+            <ShieldCheck className="w-4 h-4 text-[#166D74]" />
+            <span>© {new Date().getFullYear()} Abhay Harpale. All rights reserved.</span>
           </div>
 
-          {/* Legal links */}
-          <div className="flex items-center gap-6 flex-wrap justify-center">
-            {[
-              { href: '/privacy-policy', label: 'Privacy Policy' },
-              { href: '/terms', label: 'Terms & Conditions' },
-              { href: '/refund-policy', label: 'Refund Policy' },
-            ].map((link, i) => (
-              <Link
-                key={i}
-                href={link.href}
-                className="animated-link font-sans text-xs transition-colors"
-                style={{ color: '#88949B' }}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="flex items-center gap-6 text-xs text-[#71858A] font-sans flex-wrap justify-center">
+            <Link href="/privacy-policy" className="hover:text-[#0F5D66] transition-colors">
+              Privacy Policy
+            </Link>
+            <span className="opacity-30">·</span>
+            <Link href="/terms" className="hover:text-[#0F5D66] transition-colors">
+              Terms &amp; Conditions
+            </Link>
+            <span className="opacity-30">·</span>
+            <Link href="/refund-policy" className="hover:text-[#0F5D66] transition-colors">
+              Refund Policy
+            </Link>
           </div>
         </div>
 

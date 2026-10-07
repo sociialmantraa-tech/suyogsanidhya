@@ -9,14 +9,16 @@ import { Service, Program, SiteSettings, PublicDataContextType } from '../types'
 const PublicDataContext = createContext<PublicDataContextType | null>(null);
 
 const fallbackSettings: SiteSettings = {
-  contact_email: 'contact@abhayharpale.com',
-  contact_phone: '+91 98206 19636',
-  contact_whatsapp: '+91 98206 19636',
+  contact_email: 'suyogsaanidhya@gmail.com',
+  contact_phone: '+91 91529 62255',
+  contact_whatsapp: '+91 91529 62255',
   contact_address: 'Online Sessions Only',
   business_hours: 'By Appointment Only',
-  social_linkedin: '#',
-  social_twitter: '#',
-  social_youtube: '#'
+  social_linkedin: 'https://www.linkedin.com/in/abhayharpale',
+  social_twitter: 'https://twitter.com/abhayharpale',
+  social_facebook: 'https://facebook.com/suyogsaanidhya',
+  social_instagram: 'https://instagram.com/suyogsaanidhya',
+  social_youtube: 'https://www.youtube.com/@suyogsaanidhya'
 };
 
 interface ProviderProps {
@@ -24,10 +26,10 @@ interface ProviderProps {
 }
 
 export function PublicDataProvider({ children }: ProviderProps): React.ReactNode {
-  const [services, setServices] = useState<Service[]>([]);
-  const [programs, setPrograms] = useState<Program[]>([]);
+  const [services, setServices] = useState<Service[]>(demoServices);
+  const [programs, setPrograms] = useState<Program[]>(demoConsultationPrograms);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(fallbackSettings);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

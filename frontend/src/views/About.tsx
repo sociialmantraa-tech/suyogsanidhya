@@ -1,218 +1,226 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Award, BookOpen, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, Sparkles, BookOpen, HeartHandshake, ShieldCheck, Quote, Star, Compass } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import abhayImg from '../assets/abhay.jpg';
-const abhayImage = typeof abhayImg === 'string' ? abhayImg : (abhayImg as any)?.src || abhayImg;
-import BackgroundWrapper from '../components/BackgroundWrapper';
-import SectionDivider from '../components/SectionDivider';
 import SEO from '../components/SEO';
+import MandalaPattern from '../components/MandalaPattern';
+import MeshGradient from '../components/MeshGradient';
+import { demoBlogs } from '../data/demoBlogs';
 
-const SectionReveal = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
-  const prefersReducedMotion = typeof window !== 'undefined'
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    : false;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
+const abhayImage = typeof abhayImg === 'string' ? abhayImg : (abhayImg as any)?.src || abhayImg;
 
 export default function About() {
-  const prefersReducedMotion = typeof window !== 'undefined'
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    : false;
+  const stories = demoBlogs;
 
   return (
     <div className="w-full">
       <SEO
-        title="About Abhay Harpale"
-        description="Certified Psychologist, Vedic Astrologer, and Gold Medalist in Performing Arts with 27+ years of experience in relationship and intimacy counselling."
+        title="About Me | Abhay Harpale — Founder, Suyog Saanidhya"
+        description="I completed my Bachelor of Performing Arts in Dramatics, graduating First Class First and receiving a Gold Medal. My mission is to be a guardian of couple relationships."
         canonical="/about"
       />
-      
-      {/* Editorial Profile Section */}
-      <BackgroundWrapper
-        variant="primary"
-        patternType="lotus"
-        className="pt-36 pb-28 px-6 md:px-12"
-      >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
-          <SectionReveal className="lg:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-sm aspect-[3/4]">
-              {/* Background offset decorative blocks */}
-              <div 
-                className="absolute inset-0 rounded-[32px] translate-x-[24px] translate-y-[18px] pointer-events-none z-0 blur-[1px]"
-                style={{ backgroundColor: 'rgba(64,192,192,0.06)', boxShadow: '0 20px 50px rgba(22,109,116,0.04)' }}
-              />
-              <div 
-                className="absolute -bottom-8 -left-12 w-40 h-40 rounded-full pointer-events-none z-0"
-                style={{ border: '1.2px solid rgba(201,166,70,0.15)' }}
-              />
-              
-              {/* Inset Frame Container */}
-              <div 
-                className="absolute inset-0 rounded-[28px] overflow-hidden group z-10"
-                style={{
-                  border: '8px solid #FFFFFF',
-                  outline: '1.5px solid rgba(64,192,192,0.15)',
-                  boxShadow: '0 25px 50px rgba(22,109,116,0.06)',
-                }}
-              >
-                <img 
-                  src={abhayImage} 
-                  alt="Abhay Harpale" 
-                  className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
-                />
-                <div 
-                  className="absolute bottom-8 left-8 right-8 backdrop-blur-md p-4 text-left rounded-xl shadow-sm z-20"
+
+      {/* ══════════════════════════════════════════════════════════════════
+          1. ABOUT ME SECTION (As per Wireframe Page 2)
+          Text on Left, Professional Photo on Right
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="relative pt-36 pb-24 px-6 md:px-12 bg-[#FFFFFC] overflow-hidden">
+        {/* Ambient mesh background */}
+        <div className="absolute inset-0 pointer-events-none opacity-40">
+          <MeshGradient />
+        </div>
+
+        <MandalaPattern
+          type="lotus"
+          className="absolute -left-20 top-20 w-[450px] h-[450px] text-[#166D74]"
+          opacity={0.025}
+        />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+            {/* Left: Exact Biography Text from Wireframe */}
+            <motion.div
+              className="lg:col-span-7 space-y-6 text-left"
+              initial={{ opacity: 0, x: -25 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EAF5F3] border border-[#D0EAE4] shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#C9A646]" />
+                <span className="font-sans text-xs font-bold uppercase tracking-[0.14em] text-[#0F5D66]">
+                  Founder &amp; Relationship Guardian
+                </span>
+              </div>
+
+              <h1 className="font-serif text-4xl sm:text-5xl font-semibold text-[#0F5D66] tracking-tight">
+                About Me
+              </h1>
+
+              {/* Exact content paragraphs from user's wireframe */}
+              <div className="space-y-4 font-sans text-base sm:text-lg text-[#475C61] leading-relaxed">
+                <p className="font-medium text-[#0F5D66] text-lg sm:text-xl font-serif">
+                  I completed my Bachelor of Performing Arts in Dramatics, graduating First Class First and receiving a Gold Medal.
+                </p>
+
+                <p>
+                  I moved to Mumbai in 1997 and began my career as an actor in Gujarati commercial theatre. Over the years, I have written and directed plays and performed in more than 3,500 stage shows and 3,500 Hindi television episodes.
+                </p>
+
+                <p>
+                  For decades, I have studied and portrayed human characters. Today, I bring that experience beyond the stage — to understanding real people, their emotions, behaviours, and relationships.
+                </p>
+
+                <p className="p-4 rounded-2xl bg-[#F0F8F6] border-l-4 border-[#166D74] italic font-serif text-[#0F5D66]">
+                  My focus is on couple relationships, because I believe healthy relationships are at the foundation of individual happiness and a happier society.
+                </p>
+
+                <p className="font-semibold text-[#166D74]">
+                  My mission is to be a guardian of couple relationships — helping couples understand each other, navigate differences, and build healthier, more meaningful relationships.
+                </p>
+              </div>
+
+              {/* Action Link */}
+              <div className="pt-4 flex items-center gap-4">
+                <Link
+                  href="/book"
+                  className="px-8 py-4 rounded-full font-sans text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] inline-flex items-center gap-2"
                   style={{
-                    backgroundColor: 'rgba(255,255,255,0.85)',
-                    border: '1px solid rgba(64,192,192,0.15)',
+                    background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
                   }}
                 >
-                  <h3 className="font-serif text-lg mb-0.5 font-bold" style={{ color: '#166D74' }}>Abhay Harpale</h3>
-                  <p className="font-sans text-[10px] font-bold uppercase tracking-[0.05em]" style={{ color: '#40C0C0' }}>Relationship &amp; Intimacy Advisor</p>
+                  <span>Book a Consultation</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+                <Link
+                  href="#stories"
+                  className="px-6 py-4 rounded-full font-sans text-sm font-semibold text-[#0F5D66] bg-white border border-[#D0EAE4] hover:bg-[#EAF5F3] transition-all"
+                >
+                  <span>Read Stories</span>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right: Cutout Photo with Frame */}
+            <motion.div
+              className="lg:col-span-5 flex justify-center"
+              initial={{ opacity: 0, scale: 0.94, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="relative w-full max-w-[380px] sm:max-w-[420px] aspect-[4/5] rounded-[36px] p-2">
+                <div
+                  className="absolute inset-0 rounded-[36px] -z-10 blur-xl opacity-60 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(circle at center, rgba(201,166,70,0.3) 0%, rgba(22,109,116,0.15) 60%, transparent 80%)'
+                  }}
+                />
+                
+                <div
+                  className="relative w-full h-full rounded-[32px] overflow-hidden shadow-2xl group flex items-center justify-center bg-gradient-to-b from-[#F2F8F6] to-[#E5F1EE]"
+                  style={{
+                    border: '4px solid rgba(255, 255, 255, 0.95)',
+                    boxShadow: '0 24px 60px -12px rgba(22, 109, 116, 0.18)'
+                  }}
+                >
+                  <img
+                    src={abhayImage}
+                    alt="Abhay Harpale"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                  />
+                  
+                  <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-[#D0EAE4] shadow-md text-left">
+                    <h4 className="font-serif text-lg font-bold text-[#0F5D66]">Abhay Harpale</h4>
+                    <p className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#B8943A]">Gold Medalist · Relationship Guardian</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </SectionReveal>
+            </motion.div>
 
-          <SectionReveal className="lg:col-span-7 space-y-6 text-left" delay={0.15}>
-            <span 
-              className="inline-block px-4 py-1.5 eyebrow-label uppercase rounded-full"
-              style={{ backgroundColor: '#FFFFFF', color: '#C9A646', border: '1px solid rgba(64,192,192,0.15)' }}
-            >
-              The Narrative
-            </span>
-            <h1 className="font-serif leading-tight text-[#166D74]">
-              Certified Psychologist, Vedic Astrologer & Gold Medalist in Performing Arts
-            </h1>
-            <p className="font-sans text-[17px] font-normal leading-[1.75] max-w-[650px]" style={{ color: '#5F6C72' }}>
-              Abhay Harpale brings over 27 years of professional theatre experience and a lifetime of dedication to understanding human emotions, relationships, and authentic expression. Through <em>Suyog Sannidhya</em>, he combines the timeless wisdom of Kamasutra, Vedic Astrology, and Psychology into a holistic, practical, and deeply personalized approach to relationship and intimacy counselling.
-            </p>
-            <p className="font-sans text-[15px] font-medium leading-[1.75] max-w-[650px]" style={{ color: '#166D74' }}>
-              With compassion, confidentiality, and deep insight, Abhay helps individuals and couples strengthen emotional connections, improve communication, deepen intimacy, and build healthier, more fulfilling relationships — in a safe, non-judgmental space that fosters self-awareness, mutual understanding, healing, and lasting transformation.
-            </p>
-          </SectionReveal>
-        </div>
-      </BackgroundWrapper>
-
-      <SectionDivider type="fade" />
-
-      {/* Credentials Grid */}
-      <BackgroundWrapper
-        variant="secondary"
-        patternType="concentric"
-        className="py-28 px-6 md:px-12"
-      >
-        <div className="max-w-7xl mx-auto space-y-16 relative z-10">
-          <SectionReveal className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="text-xs uppercase tracking-widest font-bold block" style={{ color: '#C9A646' }}>Qualifications</span>
-            <h2 className="font-serif text-[#166D74]">Background &amp; Guidance Milestones</h2>
-            <p className="font-sans text-sm max-w-[650px] mx-auto" style={{ color: '#5F6C72' }}>
-              Professional focus areas and coaching principles behind our consultations.
-            </p>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Award, title: 'Certified Psychologist & Gold Medalist', desc: 'Certified Psychologist and Gold Medalist in Bachelor of Performing Arts (BPA) — blending the science of the mind with the art of human expression to guide relationships with empathy and insight.' },
-              { icon: BookOpen, title: 'Vedic Astrologer & Kamasutra Scholar', desc: 'Integrating the timeless wisdom of Vedic Astrology and Kamasutra with modern psychology through Suyog Sannidhya — offering a holistic, ancient-meets-contemporary approach to intimacy and relationship counselling.' },
-              { icon: ShieldCheck, title: '27+ Years of Theatre & Human Expression', desc: 'Over 27 years of professional theatre experience rooted in understanding authentic human emotion, communication, and connection — applied directly to creating safe, transformative counselling sessions.' },
-            ].map((item, idx) => (
-              <SectionReveal key={item.title} delay={idx * 0.1}>
-                <div 
-                  className="editorial-card p-8 space-y-4 text-left h-full"
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1.5px solid rgba(64,192,192,0.12)',
-                    boxShadow: '0 10px 30px rgba(22,109,116,0.02)'
-                  }}
-                >
-                  <item.icon className="w-8 h-8" style={{ color: '#40C0C0' }} />
-                  <h3 className="font-serif text-lg" style={{ color: '#166D74' }}>{item.title}</h3>
-                  <p className="font-sans text-xs leading-relaxed" style={{ color: '#5F6C72' }}>
-                    {item.desc}
-                  </p>
-                </div>
-              </SectionReveal>
-            ))}
           </div>
         </div>
-      </BackgroundWrapper>
+      </section>
 
-      <SectionDivider type="fade" />
+      {/* ══════════════════════════════════════════════════════════════════
+          2. STORIES SECTION (As per Wireframe Page 2)
+          Personal experiences dealt with clients
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="stories" className="py-24 px-6 md:px-12 bg-[#F7FAF9] border-t border-[rgba(22,109,116,0.08)] relative">
+        <MandalaPattern
+          type="sacred"
+          className="absolute right-0 bottom-0 w-[500px] h-[500px] text-[#C9A646]"
+          opacity={0.02}
+        />
 
-      {/* Core Values / Methodology */}
-      <BackgroundWrapper
-        variant="alternate"
-        patternType="geometry"
-        className="py-28 px-6 md:px-12"
-      >
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <div 
-              className="p-8 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left relative overflow-hidden"
-              style={{
-                borderRadius: '28px',
-                background: 'linear-gradient(135deg, #166D74, rgba(64,192,192,0.95), #008B8B)',
-                boxShadow: '0 30px 60px rgba(22,109,116,0.12)',
-              }}
-            >
-              {/* Subtle pattern overlay */}
-              <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <pattern id="about-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <circle cx="20" cy="20" r="1" fill="#FFFFFF" />
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill="url(#about-grid)" />
-                </svg>
-              </div>
-
-              <div className="lg:col-span-8 space-y-6 relative z-10">
-                <h2 className="font-serif text-white">The Suyog Sannidhya Approach</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                  <div className="space-y-2">
-                    <h4 className="font-sans font-bold uppercase tracking-wider" style={{ color: '#C9A646' }}>Holistic Wisdom</h4>
-                    <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,245,0.9)' }}>
-                      Suyog Sannidhya weaves together the timeless teachings of Kamasutra, Vedic Astrology, and Psychology to offer a truly personalized and culturally rooted path to relationship wellbeing.
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-sans font-bold uppercase tracking-wider" style={{ color: '#C9A646' }}>Compassion & Confidentiality</h4>
-                    <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,245,0.9)' }}>
-                      Every session is held in a safe, non-judgmental space that prioritises your privacy, fosters self-awareness, mutual understanding, healing, and lasting transformation.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="lg:col-span-4 flex justify-center text-center relative z-10">
-                <div 
-                  className="p-8 max-w-xs space-y-2 backdrop-blur-md rounded-2xl"
-                  style={{ border: '1px solid rgba(201,166,70,0.45)', backgroundColor: 'rgba(255,255,255,0.1)' }}
-                >
-                  <span className="font-serif text-3xl font-bold" style={{ color: '#C9A646' }}>27+</span>
-                  <p className="font-sans text-xs uppercase tracking-wider text-white">Years of Professional Experience</p>
-                </div>
-              </div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Heading & Wireframe Subtitle */}
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D0EAE4] shadow-xs">
+              <BookOpen className="w-3.5 h-3.5 text-[#C9A646]" />
+              <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#166D74]">
+                Client Journeys
+              </span>
             </div>
-          </SectionReveal>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#0F5D66]">
+              Stories
+            </h2>
+            <p className="font-serif italic text-lg sm:text-xl text-[#B8943A]">
+              These are some personal experience that I have dealt with my clients
+            </p>
+          </div>
+
+          {/* Stories Grid (As per wireframe 3 columns with Catchy Heading, First 2 lines, Read More) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {stories.map((story, index) => (
+              <motion.article
+                key={story.id || index}
+                className="bg-white rounded-3xl p-8 border border-[rgba(22,109,116,0.1)] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 relative"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+              >
+                <div className="space-y-4">
+                  {/* Category */}
+                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#F0F8F6] text-[#166D74] border border-[#D0EAE4]">
+                    {story.category_name || 'Client Experience'}
+                  </span>
+
+                  {/* Catchy Headline */}
+                  <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#0F5D66] group-hover:text-[#166D74] transition-colors leading-snug">
+                    {story.title}
+                  </h3>
+
+                  {/* First Two lines... */}
+                  <p className="font-sans text-sm text-[#5E6E72] leading-relaxed line-clamp-2">
+                    {story.excerpt || story.content?.substring(0, 140) + '...'}
+                  </p>
+                </div>
+
+                {/* Read More Button (Leads to single story page) */}
+                <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+                  <Link
+                    href={`/stories/${story.slug}`}
+                    className="inline-flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-wider text-[#166D74] group-hover:text-[#0F5D66] hover:underline"
+                  >
+                    <span>Read More</span>
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+
+                  <span className="text-[11px] font-sans text-slate-400">
+                    {story.reading_time || '4 min read'}
+                  </span>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+
         </div>
-      </BackgroundWrapper>
+      </section>
 
     </div>
   );

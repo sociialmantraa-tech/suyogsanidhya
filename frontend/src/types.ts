@@ -50,6 +50,8 @@ export interface SiteSettings {
   business_hours: string;
   social_linkedin: string;
   social_twitter: string;
+  social_facebook?: string;
+  social_instagram?: string;
   social_youtube: string;
 }
 

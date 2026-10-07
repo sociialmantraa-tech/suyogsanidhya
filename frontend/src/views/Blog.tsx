@@ -13,18 +13,11 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 
 const SectionReveal = ({ children, className = '', delay = 0, style = {} }: { children: React.ReactNode; className?: string; delay?: number; style?: React.CSSProperties }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
-  const prefersReducedMotion = typeof window !== 'undefined'
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    : false;
-
   return (
     <motion.div
-      ref={ref}
-      initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay }}
       className={className}
       style={style}
     >
@@ -35,10 +28,14 @@ const SectionReveal = ({ children, className = '', delay = 0, style = {} }: { ch
 
 function BlogContent() {
   const searchParams = useSearchParams();
-  const [blogs, setBlogs] = useState<BlogType[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [blogs, setBlogs] = useState<BlogType[]>(demoBlogs);
+  const [categories, setCategories] = useState<any[]>([
+    { id: 1, name: "Relationship Communication", slug: "communication" },
+    { id: 2, name: "Astrological Compatibility", slug: "compatibility" },
+    { id: 3, name: "Pre-Marriage Guidance", slug: "pre-marriage" }
+  ]);
   const [pagination, setPagination] = useState<{ current_page: number; total_pages: number }>({ current_page: 1, total_pages: 1 });
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Fetch parameters from URL query
   const category = searchParams?.get('category') || '';

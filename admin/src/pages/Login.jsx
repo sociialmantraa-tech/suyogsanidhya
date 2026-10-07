@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, User, AlertCircle } from 'lucide-react';
 import { adminApi } from '../utils/api';
+import logoImg from '../assets/logo.png';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -75,9 +76,12 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
       <div className="max-w-md w-full bg-white border border-gray-200 p-8 shadow-md rounded-lg space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="font-serif text-3xl text-darkCyan font-bold">Advisory Portal</h1>
-          <p className="font-sans text-xs text-gray-500 uppercase tracking-wider">Abhay Harpale Administration Dashboard</p>
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <img src={logoImg} alt="Suyog Saanidhya" className="h-16 w-auto object-contain" />
+          <div>
+            <h1 className="font-serif text-2xl text-darkCyan font-bold">Advisory Portal</h1>
+            <p className="font-sans text-xs text-gray-500 uppercase tracking-wider">Suyog Saanidhya Administration</p>
+          </div>
         </div>
 
         {error && (

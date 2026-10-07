@@ -65,9 +65,9 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-gray-950 text-gray-300 flex flex-col justify-between border-r border-gray-800 shrink-0">
         <div>
-          <div className="p-4 border-b border-gray-800 flex flex-col items-center">
-            <img src={logoSrc} alt="Suyog Saanidhya" className="h-24 object-contain" style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))' }} />
-            <span className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Management Desk</span>
+          <div className="p-4 border-b border-gray-800 flex flex-col items-center justify-center">
+            <img src={logoSrc} alt="Suyog Saanidhya" className="h-16 w-auto max-w-[200px] object-contain drop-shadow-md" />
+            <span className="text-[10px] text-gray-400 uppercase tracking-wider mt-2 font-medium">Management Desk</span>
           </div>
 
           <nav className="p-4 space-y-1">

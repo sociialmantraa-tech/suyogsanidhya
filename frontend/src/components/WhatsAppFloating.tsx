@@ -10,7 +10,7 @@ export default function WhatsAppFloating() {
   const [isHovered, setIsHovered] = useState(false);
 
   const getWhatsappLink = () => {
-    const rawNumber = siteSettings.contact_whatsapp || '+91 98206 19636';
+    const rawNumber = siteSettings.contact_whatsapp || '+91 91529 62255';
     const cleaned = rawNumber.replace(/[^\d+]/g, '');
     // Ensure country code format for WhatsApp link
     const formatted = cleaned.startsWith('+') ? cleaned.replace('+', '') : `91${cleaned}`;

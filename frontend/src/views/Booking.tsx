@@ -472,7 +472,7 @@ export default function Booking() {
                         backgroundColor: 'rgba(255,255,245,0.4)',
                         borderColor: formErrors.phone ? '#EF4444' : 'rgba(64,192,192,0.2)'
                       }}
-                      placeholder="9820619636"
+                      placeholder="9152962255"
                     />
                   </div>
                   {formErrors.phone && <p className="text-red-500 text-[11px] mt-1">{formErrors.phone}</p>}

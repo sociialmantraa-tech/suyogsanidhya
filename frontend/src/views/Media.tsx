@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, X } from 'lucide-react';
+import { Play, X, Youtube, ArrowRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { api } from '../utils/api';
 import { demoVideos } from '../data/demoVideos';
 import { Video } from '../types';
 import BackgroundWrapper from '../components/BackgroundWrapper';
+import { usePublicData } from '../context/PublicDataContext';
 
 const SectionReveal = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -32,6 +33,8 @@ export default function Media() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeVideo, setActiveVideo] = useState<Video | null>(null);
+  const { siteSettings } = usePublicData();
+  const youtubeUrl = siteSettings.social_youtube || 'https://www.youtube.com/@suyogsaanidhya';
 
   useEffect(() => {
     api.get<{ videos: Video[] }>('/videos/list.php')
@@ -113,6 +116,20 @@ export default function Media() {
           <p className="font-sans text-sm leading-relaxed" style={{ color: '#5F6C72' }}>
             Thoughtful discussions and video insights addressing communication patterns, intimate closeness, and trust recovery in partnerships.
           </p>
+
+          <div className="pt-2">
+            <a
+              href={youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-sans text-xs font-semibold text-white shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+              style={{ backgroundColor: '#FF0000' }}
+            >
+              <Youtube className="w-4 h-4 fill-current" />
+              <span>Visit YouTube Channel (@suyogsaanidhya)</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </SectionReveal>
 
         {loading ? (
