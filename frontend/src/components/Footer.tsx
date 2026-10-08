@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import logoImg from '../assets/logo.png';
-import { Mail, Phone, MapPin, Clock, Linkedin, Twitter, Youtube, ArrowRight, Sparkles, Heart, ShieldCheck } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Linkedin, Twitter, Youtube, Facebook, Instagram, ArrowRight, Sparkles, Heart, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { usePublicData } from '../context/PublicDataContext';
 import MandalaPattern from './MandalaPattern';
@@ -141,23 +141,27 @@ export default function Footer() {
             </p>
             <div className="flex items-center space-x-2.5 pt-2">
               {[
+                { href: settings.social_facebook || 'https://facebook.com/suyogsaanidhya', label: 'Facebook', icon: <Facebook className="w-4 h-4" /> },
+                { href: settings.social_instagram || 'https://instagram.com/suyogsaanidhya', label: 'Instagram', icon: <Instagram className="w-4 h-4" /> },
+                { href: settings.social_youtube || 'https://www.youtube.com/@suyogsaanidhya', label: 'YouTube', icon: <Youtube className="w-4 h-4" /> },
                 { href: settings.social_linkedin, label: 'LinkedIn', icon: <Linkedin className="w-4 h-4" /> },
-                { href: settings.social_twitter, label: 'Twitter', icon: <Twitter className="w-4 h-4" /> },
-                { href: settings.social_youtube, label: 'YouTube', icon: <Youtube className="w-4 h-4" /> }
-              ].map((soc, idx) => (
-                <motion.a
-                  key={idx}
-                  href={soc.href || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full border border-[rgba(22,109,116,0.15)] flex items-center justify-center bg-white/90 text-[#166D74] transition-all hover:bg-[#166D74] hover:text-white hover:border-[#166D74] shadow-xs"
-                  whileHover={{ y: -3 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label={soc.label}
-                >
-                  {soc.icon}
-                </motion.a>
-              ))}
+                { href: settings.social_twitter, label: 'Twitter', icon: <Twitter className="w-4 h-4" /> }
+              ]
+                .filter(soc => Boolean(soc.href) && soc.href !== '#' && !soc.href.includes('linkedin.com/in/abhayharpale') && !soc.href.includes('twitter.com/abhayharpale'))
+                .map((soc, idx) => (
+                  <motion.a
+                    key={idx}
+                    href={soc.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-full border border-[rgba(22,109,116,0.15)] flex items-center justify-center bg-white/90 text-[#166D74] transition-all hover:bg-[#166D74] hover:text-white hover:border-[#166D74] shadow-xs"
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label={soc.label}
+                  >
+                    {soc.icon}
+                  </motion.a>
+                ))}
             </div>
           </div>
 

@@ -14,8 +14,8 @@ const fallbackSettings: SiteSettings = {
   contact_whatsapp: '+91 91529 62255',
   contact_address: 'Online Sessions Only',
   business_hours: 'By Appointment Only',
-  social_linkedin: 'https://www.linkedin.com/in/abhayharpale',
-  social_twitter: 'https://twitter.com/abhayharpale',
+  social_linkedin: '',
+  social_twitter: '',
   social_facebook: 'https://facebook.com/suyogsaanidhya',
   social_instagram: 'https://instagram.com/suyogsaanidhya',
   social_youtube: 'https://www.youtube.com/@suyogsaanidhya'

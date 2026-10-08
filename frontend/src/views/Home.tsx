@@ -332,16 +332,18 @@ export default function Home() {
 
                 {/* Social Button Grid */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
-                  {/* LinkedIn */}
-                  <a
-                    href={settings.social_linkedin || 'https://www.linkedin.com/in/abhayharpale'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                    className="w-12 h-12 rounded-2xl bg-[#0077B5]/10 text-[#0077B5] hover:bg-[#0077B5] hover:text-white flex items-center justify-center transition-all duration-300 shadow-xs hover:scale-105"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                  </a>
+                  {/* LinkedIn - Only render if valid custom URL provided */}
+                  {settings.social_linkedin && settings.social_linkedin !== '#' && !settings.social_linkedin.includes('linkedin.com/in/abhayharpale') && (
+                    <a
+                      href={settings.social_linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="LinkedIn"
+                      className="w-12 h-12 rounded-2xl bg-[#0077B5]/10 text-[#0077B5] hover:bg-[#0077B5] hover:text-white flex items-center justify-center transition-all duration-300 shadow-xs hover:scale-105"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  )}
 
                   {/* WhatsApp */}
                   <a
