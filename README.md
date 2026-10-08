@@ -88,16 +88,10 @@ This outputs compiled admin panel files directly to the root `admin_dist/` direc
 
 ---
 
-## 6. Hosting Deployment (cPanel Upload)
-1. **Upload Assets**: Zip and upload the following folders and files from your project root directly into the hosting `public_html` folder using cPanel **File Manager**:
-   - `dist/` (compiled public frontend assets)
-   - `backend/` (private PHP configs and helper modules)
-   - `api/` (public API endpoints)
-   - `uploads/` (image upload asset folder)
-   - `.htaccess` (url rewrites)
-   - `index.php` (SEO router)
-2. **Deploy Admin Panel**: Create a subfolder named `admin` inside `public_html`. Upload all the contents of `admin_dist/` directly inside this `admin` subfolder.
-3. **Set File Permissions**: Ensure directory permissions are set to `755` and file permissions are set to `644`. Ensure `backend/config/env.php` is protected.
+## 6. Hosting Deployment (GoDaddy Shared Hosting / cPanel)
+1. **Generate Build Package**: Run `npm run package:hosting` (or `node scripts/package-cpanel.js`). This builds the Next.js static export, renames `_next` to `staticassets` (bypassing GoDaddy's ModSecurity firewall), includes the production `.htaccess`, and generates `suyogweb.zip`.
+2. **Upload to cPanel**: Upload `suyogweb.zip` to `public_html` in GoDaddy cPanel File Manager and click **Extract**.
+3. **Automated Permission Repair**: Visit `https://suyogsaanidhya.com/fix-permissions.php` once in your browser to reset directory permissions to `0755` and file permissions to `0644`.
 
 ---
 
