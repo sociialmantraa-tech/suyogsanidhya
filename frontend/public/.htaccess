@@ -18,13 +18,16 @@ Options -Indexes
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # -------------------------------------------------------------------
-  # Allow direct access to physical files, directories, API, uploads & admin
+  # Allow direct access to physical files, directories, API, uploads & assets
   # -------------------------------------------------------------------
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Exclude API endpoints, uploads, and admin subfolder
+  # Direct pass-through for static assets, API endpoints, uploads, and admin
+  RewriteRule ^next_assets/ - [L]
+  RewriteRule ^_next/ - [L]
+  RewriteRule ^assets/ - [L]
   RewriteRule ^api/ - [L]
   RewriteRule ^uploads/ - [L]
   RewriteRule ^admin/ - [L]
@@ -42,7 +45,7 @@ Options -Indexes
 </IfModule>
 
 # -------------------------------------------------------------------
-# Security Headers
+# Security Headers & MIME Types
 # -------------------------------------------------------------------
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"

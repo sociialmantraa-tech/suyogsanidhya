@@ -3,47 +3,48 @@
 # Domain: suyogsaanidhya.com
 # =====================================================================
 
-# 1. Directory Indexing & Default File Resolution
+# 1. Directory Indexing & Options
 DirectoryIndex index.html Index.html index.php
-Options -Indexes
+Options +FollowSymLinks -Indexes
+
+# 2. Grant explicit file read access to bypass cPanel 403 Forbidden errors
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot|json|html|txt|xml)$">
+  <IfModule mod_authz_core.c>
+    Require all granted
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Allow from all
+  </IfModule>
+</FilesMatch>
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # -------------------------------------------------------------------
   # Force HTTPS Security Redirect
-  # -------------------------------------------------------------------
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # -------------------------------------------------------------------
-  # Allow direct access to physical files, directories, API, uploads & admin
-  # -------------------------------------------------------------------
+  # Direct pass-through for existing files or directories
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Exclude API endpoints, uploads, and admin subfolder
-  RewriteRule ^api/ - [L]
-  RewriteRule ^uploads/ - [L]
-  RewriteRule ^admin/ - [L]
+  # Allow direct pass-through for Next.js assets
+  RewriteRule ^_next/(.*)$ _next/$1 [L]
+  RewriteRule ^next_assets/(.*)$ next_assets/$1 [L]
+  RewriteRule ^assets/(.*)$ assets/$1 [L]
 
-  # -------------------------------------------------------------------
-  # Clean HTML extension rewrite (e.g. /about -> /about.html or /about/index.html)
-  # -------------------------------------------------------------------
+  # Clean HTML extension rewrite (e.g. /about -> /about.html)
   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
   RewriteRule ^(.*)$ /$1.html [L]
 
-  # -------------------------------------------------------------------
-  # SPA / Next.js Static Export Fallback Rewrite
-  # -------------------------------------------------------------------
+  # SPA / Next.js Static Export Fallback
   RewriteRule ^ index.html [L]
 </IfModule>
 
-# -------------------------------------------------------------------
 # Security Headers
-# -------------------------------------------------------------------
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
@@ -51,9 +52,7 @@ Options -Indexes
   Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
-# -------------------------------------------------------------------
-# Performance Optimization: GZIP / Deflate Compression
-# -------------------------------------------------------------------
+# GZIP Compression
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
   AddOutputFilterByType DEFLATE application/javascript application/x-javascript
@@ -61,9 +60,7 @@ Options -Indexes
   AddOutputFilterByType DEFLATE image/svg+xml font/opentype font/otf font/ttf
 </IfModule>
 
-# -------------------------------------------------------------------
-# Browser Caching Headers
-# -------------------------------------------------------------------
+# Browser Caching
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 month"
