@@ -20,6 +20,12 @@ pnpm-debug.log*
 .next/
 */.next/
 **/.next/
+out/
+*/out/
+**/.out/
+dist/
+*/dist/
+*.zip
 
 # Editor & OS artifacts
 .vscode/*

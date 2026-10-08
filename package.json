@@ -7,6 +7,7 @@
     "dev:admin": "npm run dev --prefix admin",
     "build:frontend": "npm run build --prefix frontend",
     "build:admin": "npm run build --prefix admin",
-    "build": "npm run build:frontend && npm run build:admin"
+    "build": "npm run build:frontend && npm run build:admin",
+    "package:hosting": "npm run build:frontend && node scripts/package-cpanel.js"
   }
 }
