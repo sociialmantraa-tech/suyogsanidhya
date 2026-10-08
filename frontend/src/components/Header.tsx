@@ -178,20 +178,20 @@ export default function Header() {
                   href={link.href}
                   className={`relative px-4 py-2 font-sans text-[14.5px] lg:text-[15px] tracking-[0.01em] transition-all duration-200 block group/link ${
                     active
-                      ? 'text-[#0F5D66] font-bold'
-                      : 'text-[#485C61] hover:text-[#0F5D66] font-medium'
+                      ? 'text-[#00AAC1] font-bold'
+                      : 'text-[#4B5563] hover:text-[#00AAC1] font-semibold'
                   }`}
                 >
                   <span className="relative z-10">{link.label}</span>
 
-                  {/* Active Gradient Underline Bar with Warm Golden Tip */}
+                  {/* Active Underline Bar */}
                   {active && (
                     <motion.div
                       layoutId="nav-active-glow"
                       className="absolute bottom-0 left-3.5 right-3.5 h-[2.5px] rounded-full"
                       style={{
-                        background: 'linear-gradient(90deg, #166D74 0%, #C9A646 50%, #166D74 100%)',
-                        boxShadow: '0 2px 8px rgba(22, 109, 116, 0.25)',
+                        background: '#00AAC1',
+                        boxShadow: '0 2px 8px rgba(0, 170, 193, 0.35)',
                       }}
                       transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
@@ -199,7 +199,7 @@ export default function Header() {
 
                   {/* Hover subtle glow dot */}
                   {!active && (
-                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#166D74] opacity-0 group-hover/link:opacity-60 transition-opacity duration-200" />
+                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#00AAC1] opacity-0 group-hover/link:opacity-70 transition-opacity duration-200" />
                   )}
                 </Link>
               </motion.div>
@@ -216,21 +216,17 @@ export default function Header() {
           >
             <Link
               href="/book"
-              className="relative inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-sans text-[13.5px] font-semibold tracking-wide text-white overflow-hidden shadow-[0_4px_16px_rgba(22,109,116,0.25)] hover:shadow-[0_8px_25px_rgba(22,109,116,0.38)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-[#C9A646]/30 group"
-              style={{
-                background: 'linear-gradient(135deg, #166D74 0%, #0D4E55 100%)',
-              }}
+              className="relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full font-sans text-[14px] font-bold tracking-wide text-white overflow-hidden shadow-[0_4px_18px_rgba(0,170,193,0.32)] hover:shadow-[0_8px_30px_rgba(0,170,193,0.45)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F]"
             >
-              <span className="absolute inset-0 bg-white/15 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               <span>Book Consultation</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 text-[#EAF5F3]" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 text-white" />
             </Link>
           </motion.div>
         </div>
 
         {/* Mobile Hamburger Button */}
         <button
-          className="md:hidden p-2.5 rounded-full bg-white/80 border border-[rgba(22,109,116,0.15)] text-[#0F5D66] focus:outline-none transition-transform active:scale-95 shadow-sm"
+          className="md:hidden p-2.5 rounded-full bg-white/80 border border-[rgba(0,170,193,0.2)] text-[#00AAC1] focus:outline-none transition-transform active:scale-95 shadow-sm"
           onClick={toggleMenu}
           aria-label={isOpen ? "Close menu" : "Open menu"}
         >
@@ -263,18 +259,14 @@ export default function Header() {
 
             {/* Slide-in Drawer */}
             <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-[380px] z-50 lg:hidden flex flex-col justify-between shadow-2xl overflow-hidden"
+              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-[380px] z-50 lg:hidden flex flex-col justify-between shadow-2xl overflow-hidden bg-white"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                backgroundColor: '#FFFFFC',
-                borderLeft: '1px solid rgba(22,109,116,0.12)',
-              }}
             >
               {/* Drawer Header */}
-              <div className="p-4 flex items-center justify-between border-b border-[rgba(22,109,116,0.08)] bg-white/80 backdrop-blur-md">
+              <div className="p-4 flex items-center justify-between border-b border-[rgba(0,170,193,0.1)] bg-white">
                 <Link href="/" onClick={toggleMenu} className="flex items-center">
                   <img
                     src={logoSrc}
@@ -292,7 +284,7 @@ export default function Header() {
                 </Link>
                 <button
                   onClick={toggleMenu}
-                  className="p-2 rounded-full hover:bg-slate-100 text-[#0F5D66] transition-colors"
+                  className="p-2 rounded-full hover:bg-slate-100 text-[#00AAC1] transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -301,7 +293,7 @@ export default function Header() {
               {/* Navigation Links */}
               <div className="p-6 flex-1 overflow-y-auto space-y-6">
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71858A] block px-2 mb-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block px-2 mb-1">
                     Navigation
                   </span>
                   {navLinks.map((link, i) => (
@@ -315,8 +307,8 @@ export default function Header() {
                         href={link.href}
                         className={`flex items-center justify-between py-2.5 px-3 rounded-xl font-sans text-base transition-colors ${
                           isActive(link.href)
-                            ? 'bg-[#EAF5F3] text-[#0F5D66] font-semibold border border-[#D0EAE4]'
-                            : 'text-[#394E53] hover:bg-[#F7FAF9]'
+                            ? 'bg-[#EBF7F7] text-[#00AAC1] font-bold border border-[#00AAC1]/20'
+                            : 'text-[#4B5563] hover:bg-[#F4F8F8]'
                         }`}
                       >
                         {link.label}
@@ -327,23 +319,23 @@ export default function Header() {
                 </div>
 
                 {/* Services Section in Drawer */}
-                <div className="pt-4 border-t border-[rgba(22,109,116,0.08)]">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#B8943A] block px-2 mb-2">
+                <div className="pt-4 border-t border-[rgba(0,170,193,0.1)]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#00AAC1] block px-2 mb-2">
                     Consultations
                   </span>
                   <div className="space-y-1">
                     <Link
                       href="/services"
-                      className="flex items-center justify-between py-2 px-3 rounded-xl font-sans text-sm font-semibold text-[#0F5D66] hover:bg-[#F7FAF9]"
+                      className="flex items-center justify-between py-2 px-3 rounded-xl font-sans text-sm font-semibold text-[#00AAC1] hover:bg-[#F4F8F8]"
                     >
                       All Services
-                      <ArrowRight className="w-3.5 h-3.5 text-[#166D74]" />
+                      <ArrowRight className="w-3.5 h-3.5 text-[#00AAC1]" />
                     </Link>
                     {services.slice(0, 5).map(service => (
                       <Link
                         key={service.id}
                         href={`/services/${service.slug}`}
-                        className="block py-1.5 px-3 rounded-lg font-sans text-xs text-[#5E6E72] hover:text-[#0F5D66] hover:bg-[#F7FAF9] transition-colors"
+                        className="block py-1.5 px-3 rounded-lg font-sans text-xs text-[#4B5563] hover:text-[#00AAC1] hover:bg-[#F4F8F8] transition-colors"
                       >
                         {service.title}
                       </Link>
@@ -353,19 +345,16 @@ export default function Header() {
               </div>
 
               {/* Drawer Bottom CTA */}
-              <div className="p-6 border-t border-[rgba(22,109,116,0.08)] bg-white/70 backdrop-blur-md space-y-3">
+              <div className="p-6 border-t border-[rgba(0,170,193,0.1)] bg-white space-y-3">
                 <Link
                   href="/book"
-                  className="w-full py-3.5 px-4 rounded-full flex items-center justify-center gap-2 font-sans text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all"
-                  style={{
-                    background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
-                  }}
+                  className="w-full py-3.5 px-4 rounded-full flex items-center justify-center gap-2 font-sans text-sm font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] shadow-md transition-all"
                 >
                   <span>Book Consultation</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <div className="flex items-center justify-center gap-2 text-[11px] text-[#71858A]">
-                  <PhoneCall className="w-3.5 h-3.5 text-[#166D74]" />
+                <div className="flex items-center justify-center gap-2 text-[11px] text-[#6B7280]">
+                  <PhoneCall className="w-3.5 h-3.5 text-[#00AAC1]" />
                   <span>Confidential Sessions Available</span>
                 </div>
               </div>

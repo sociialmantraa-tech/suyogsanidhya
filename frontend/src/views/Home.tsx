@@ -4,14 +4,15 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Compass, HeartHandshake, ShieldCheck, Sparkles, MessageCircle, Mail, MapPin, Linkedin, Facebook, Instagram, Youtube, Phone } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
-import abhayHeroImg from '../assets/abhay_hero.jpg';
+import abhayHeroImg from '../assets/abhay_blue_blazer.jpg';
+import abhayCutoutImg from '../assets/abhay_blue_blazer_cutout.png';
 import { usePublicData } from '../context/PublicDataContext';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import SEO from '../components/SEO';
 import MandalaPattern from '../components/MandalaPattern';
 import MeshGradient from '../components/MeshGradient';
 
-const abhayImage = typeof abhayHeroImg === 'string' ? abhayHeroImg : (abhayHeroImg as any)?.src || abhayHeroImg;
+const abhayHero = typeof abhayHeroImg === 'string' ? abhayHeroImg : (abhayHeroImg as any)?.src || abhayHeroImg;
 
 export default function Home() {
   const { services, siteSettings } = usePublicData();
@@ -45,7 +46,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-            {/* Left: Professional Photo with Background Cutout & Gold Accent Frame */}
+            {/* Left: Original Professional Photo with full background */}
             <motion.div
               className="lg:col-span-5 flex justify-center lg:justify-start"
               initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -57,28 +58,28 @@ export default function Home() {
                 <div
                   className="absolute inset-0 rounded-[36px] -z-10 blur-xl opacity-60 pointer-events-none"
                   style={{
-                    background: 'radial-gradient(circle at center, rgba(201,166,70,0.25) 0%, rgba(22,109,116,0.15) 60%, transparent 80%)'
+                    background: 'radial-gradient(circle at center, rgba(0,170,193,0.2) 0%, rgba(0,107,125,0.1) 60%, transparent 80%)'
                   }}
                 />
                 
                 {/* Image Border Container */}
                 <div
-                  className="relative w-full h-full rounded-[32px] overflow-hidden shadow-2xl group flex items-center justify-center bg-gradient-to-b from-[#F2F8F6] to-[#E5F1EE]"
+                  className="relative w-full h-full rounded-[32px] overflow-hidden shadow-2xl group flex items-center justify-center bg-gray-100"
                   style={{
                     border: '4px solid rgba(255, 255, 255, 0.95)',
-                    boxShadow: '0 24px 60px -12px rgba(22, 109, 116, 0.18)'
+                    boxShadow: '0 24px 60px -12px rgba(0, 170, 193, 0.18)'
                   }}
                 >
                   <img
-                    src={abhayImage}
+                    src={abhayHero}
                     alt="Abhay Harpale — Founder, Suyog Saanidhya"
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
                   />
 
                   {/* Corner Gold Lotus Accent */}
-                  <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/85 backdrop-blur-md border border-[#C9A646]/30 shadow-xs flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#C9A646]" />
-                    <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#0F5D66]">Vedic &amp; Psychology</span>
+                  <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/85 backdrop-blur-md border border-[#00AAC1]/30 shadow-xs flex items-center gap-1.5 z-10">
+                    <Sparkles className="w-3.5 h-3.5 text-[#00AAC1]" />
+                    <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#006B7D]">Vedic &amp; Psychology</span>
                   </div>
                 </div>
               </div>
@@ -92,24 +93,24 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EAF5F3] border border-[#D0EAE4] shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-[#C9A646] animate-pulse" />
-                <span className="font-sans text-xs font-bold uppercase tracking-[0.14em] text-[#0F5D66]">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EBF7F7] border border-[#00AAC1]/20 shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-[#00AAC1] animate-pulse" />
+                <span className="font-sans text-xs font-bold uppercase tracking-[0.14em] text-[#006B7D]">
                   Founder, Suyog Saanidhya
                 </span>
               </div>
 
               {/* Founder Name */}
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#0F5D66] tracking-tight leading-[1.1]">
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#1F2937] tracking-tight leading-[1.1]">
                 Abhay Harpale
               </h1>
 
               {/* Tagline */}
-              <p className="font-serif italic text-2xl sm:text-3xl text-[#B8943A] leading-snug">
+              <p className="font-serif italic text-2xl sm:text-3xl text-[#006B7D] leading-snug">
                 Your Relationship And Astrology Guardian
               </p>
 
-              <p className="font-sans text-base sm:text-lg text-[#55696E] leading-relaxed max-w-xl">
+              <p className="font-sans text-base sm:text-lg text-[#4B5563] leading-relaxed max-w-xl">
                 Guiding couples and individuals toward conscious intimacy, mutual understanding, and lifelong harmony through the combined wisdom of astrology and relational psychology.
               </p>
 
@@ -117,7 +118,7 @@ export default function Home() {
               <div className="flex flex-wrap items-center gap-4 pt-4">
                 <Link
                   href="/about"
-                  className="px-8 py-4 rounded-full font-sans text-sm font-semibold text-[#0F5D66] bg-white border-2 border-[#166D74] shadow-sm hover:bg-[#EAF5F3] hover:shadow-md transition-all duration-300 hover:scale-[1.02] flex items-center gap-2"
+                  className="px-8 py-3.5 rounded-full font-sans text-sm font-bold text-[#00AAC1] bg-white border-2 border-[#00AAC1] shadow-xs hover:bg-[#EBF7F7] transition-all duration-300 hover:scale-[1.02] flex items-center gap-2"
                 >
                   <span>About Me</span>
                   <ArrowRight className="w-4 h-4" />
@@ -125,10 +126,7 @@ export default function Home() {
 
                 <Link
                   href="/book"
-                  className="px-8 py-4 rounded-full font-sans text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] flex items-center gap-2"
-                  style={{
-                    background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
-                  }}
+                  className="px-8 py-3.5 rounded-full font-sans text-sm font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] shadow-md hover:shadow-xl hover:shadow-[#00AAC1]/25 transition-all duration-300 hover:scale-[1.02] flex items-center gap-2"
                 >
                   <span>Book Session</span>
                   <ArrowRight className="w-4 h-4" />
@@ -136,15 +134,15 @@ export default function Home() {
               </div>
 
               {/* Trust Badge Indicators */}
-              <div className="pt-6 border-t border-[rgba(22,109,116,0.1)] flex flex-wrap items-center gap-6 text-xs text-[#6A7E84] font-medium">
+              <div className="pt-6 border-t border-[rgba(0,170,193,0.1)] flex flex-wrap items-center gap-6 text-xs text-[#6B7280] font-semibold">
                 <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-[#166D74]" /> 100% Confidential
+                  <ShieldCheck className="w-4 h-4 text-[#00AAC1]" /> 100% Confidential
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <HeartHandshake className="w-4 h-4 text-[#C9A646]" /> Compassionate Guidance
+                  <HeartHandshake className="w-4 h-4 text-[#006B7D]" /> Compassionate Guidance
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Compass className="w-4 h-4 text-[#166D74]" /> Astrology &amp; Psychology
+                  <Compass className="w-4 h-4 text-[#00AAC1]" /> Astrology &amp; Psychology
                 </span>
               </div>
             </motion.div>
@@ -166,16 +164,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Section Header */}
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D0EAE4] shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-[#C9A646]" />
-              <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#166D74]">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#00AAC1]/20 shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-[#00AAC1]" />
+              <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#006B7D]">
                 Astrological &amp; Psychological Harmony
               </span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#0F5D66]">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#1F2937]">
               Our Services
             </h2>
-            <p className="font-sans text-sm sm:text-base text-[#5E6E72] leading-relaxed">
+            <p className="font-sans text-sm sm:text-base text-[#4B5563] leading-relaxed">
               Specialized advisory programs designed to untangle complex emotions and illuminate clear pathways forward.
             </p>
           </div>
@@ -185,28 +183,28 @@ export default function Home() {
             {services.map((service, index) => (
               <motion.div
                 key={service.id || index}
-                className="bg-white rounded-3xl p-8 border border-[rgba(22,109,116,0.1)] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 relative overflow-hidden"
+                className="bg-white rounded-3xl p-8 border border-[rgba(0,170,193,0.12)] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 relative overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
               >
                 {/* Top decorative accent line on hover */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#166D74] via-[#C9A646] to-[#166D74] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-[#00AAC1] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <div className="space-y-4">
                   {/* Category Pill */}
-                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#F0F8F6] text-[#166D74] border border-[#D0EAE4]">
+                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#EBF7F7] text-[#00AAC1] border border-[#00AAC1]/20">
                     {service.category_name || 'Consultation'}
                   </span>
 
                   {/* Service Title */}
-                  <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#0F5D66] group-hover:text-[#166D74] transition-colors leading-snug">
+                  <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#1F2937] group-hover:text-[#00AAC1] transition-colors leading-snug">
                     {service.title}
                   </h3>
 
                   {/* Short Description */}
-                  <p className="font-sans text-sm text-[#5E6E72] leading-relaxed line-clamp-3">
+                  <p className="font-sans text-sm text-[#4B5563] leading-relaxed line-clamp-3">
                     {service.short_description || service.full_description}
                   </p>
                 </div>
@@ -215,7 +213,7 @@ export default function Home() {
                 <div className="pt-6 mt-6 border-t border-slate-100">
                   <Link
                     href={`/book?service=${service.slug || service.id}`}
-                    className="inline-flex items-center justify-between w-full py-3 px-5 rounded-full font-sans text-xs font-bold uppercase tracking-wider text-[#0F5D66] bg-[#F2F8F6] border border-[#D0EAE4] group-hover:bg-[#166D74] group-hover:text-white group-hover:border-[#166D74] transition-all duration-300 shadow-xs"
+                    className="inline-flex items-center justify-between w-full py-3 px-5 rounded-full font-sans text-xs font-bold uppercase tracking-wider text-[#00AAC1] bg-[#EBF7F7] border border-[#00AAC1]/20 group-hover:bg-[#00AAC1] group-hover:text-white group-hover:border-[#00AAC1] transition-all duration-300 shadow-xs"
                   >
                     <span>Book Now</span>
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -229,7 +227,7 @@ export default function Home() {
           <div className="mt-14 text-center">
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 font-sans text-sm font-semibold text-[#166D74] hover:text-[#0F5D66] hover:underline"
+              className="inline-flex items-center gap-2 font-sans text-sm font-bold text-[#00AAC1] hover:text-[#0092A8] hover:underline"
             >
               <span>Explore All Consultation Offerings</span>
               <ArrowRight className="w-4 h-4" />
@@ -394,10 +392,7 @@ export default function Home() {
                 <div className="pt-4 border-t border-slate-100">
                   <Link
                     href="/book"
-                    className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-full font-sans text-xs font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.01]"
-                    style={{
-                      background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
-                    }}
+                    className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-full font-sans text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
                   >
                     <span>Schedule Appointment</span>
                     <ArrowRight className="w-4 h-4" />

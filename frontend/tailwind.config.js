@@ -7,18 +7,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgPrimary: "#FFFFF4", // Solid premium background (Ivory)
-        bgSecondary: "#F7FCFC", // Very light accent sections (Turquoise tint)
-        bgWarm: "#FAF3E0", // Gold accent tint
-        primaryTurquoise: "#40C0C0", // Primary Accent
-        brightTurquoise: "#008B8B", // Primary Button
-        darkCyan: "#008B8B", // Primary Button
-        accentGold: "#D4AF37", // Luxury Accent
-        mainText: "#0F5D66", // Primary Heading
-        secondaryHeading: "#176F78", // Secondary Heading
-        bodyText: "#4D666B", // Body Text
-        secondaryText: "#4D666B", // Secondary Body Text
-        mutedText: "#71858A", // Muted Text
+        bgPrimary: "#FFFFFF", // Crisp white background like BetterLYF
+        bgSecondary: "#F4F8F8", // Soft teal tint section fill
+        bgWarm: "#EBF7F7", // Light cyan accent fill
+        primaryTurquoise: "#00AAC1", // BetterLYF Primary Cyan
+        brightTurquoise: "#00AAC1", // BetterLYF CTA Button Cyan
+        darkCyan: "#00AAC1", // BetterLYF Main Brand Color
+        hoverCyan: "#0092A8", // BetterLYF Hover Teal
+        deepCyan: "#006B7D", // BetterLYF Deep Ocean Cyan
+        accentGold: "#D4AF37", // Retained Subtle Gold
+        mainText: "#1F2937", // Dark Slate Heading
+        secondaryHeading: "#006B7D", // Deep Ocean Cyan Heading
+        bodyText: "#4B5563", // Charcoal Body Text
+        secondaryText: "#4B5563", // Body Text
+        mutedText: "#6B7280", // Muted Slate Gray
         white: "#FFFFFF",
       },
       fontFamily: {

@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles, BookOpen, HeartHandshake, ShieldCheck, Quote, Star, Compass } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import abhayImg from '../assets/abhay.jpg';
+import abhayCutoutImg from '../assets/abhay_cutout.png';
 import SEO from '../components/SEO';
 import MandalaPattern from '../components/MandalaPattern';
 import MeshGradient from '../components/MeshGradient';
 import { demoBlogs } from '../data/demoBlogs';
 
-const abhayImage = typeof abhayImg === 'string' ? abhayImg : (abhayImg as any)?.src || abhayImg;
+const abhay = typeof abhayImg === 'string' ? abhayImg : (abhayImg as any)?.src || abhayImg;
 
 export default function About() {
   const stories = demoBlogs;
@@ -49,20 +50,20 @@ export default function About() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EAF5F3] border border-[#D0EAE4] shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-[#C9A646]" />
-                <span className="font-sans text-xs font-bold uppercase tracking-[0.14em] text-[#0F5D66]">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EBF7F7] border border-[#00AAC1]/20 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#00AAC1]" />
+                <span className="font-sans text-xs font-bold uppercase tracking-[0.14em] text-[#006B7D]">
                   Founder &amp; Relationship Guardian
                 </span>
               </div>
 
-              <h1 className="font-serif text-4xl sm:text-5xl font-semibold text-[#0F5D66] tracking-tight">
+              <h1 className="font-serif text-4xl sm:text-5xl font-semibold text-[#1F2937] tracking-tight">
                 About Me
               </h1>
 
               {/* Exact content paragraphs from user's wireframe */}
-              <div className="space-y-4 font-sans text-base sm:text-lg text-[#475C61] leading-relaxed">
-                <p className="font-medium text-[#0F5D66] text-lg sm:text-xl font-serif">
+              <div className="space-y-4 font-sans text-base sm:text-lg text-[#4B5563] leading-relaxed">
+                <p className="font-semibold text-[#006B7D] text-lg sm:text-xl font-serif">
                   I completed my Bachelor of Performing Arts in Dramatics, graduating First Class First and receiving a Gold Medal.
                 </p>
 
@@ -74,11 +75,11 @@ export default function About() {
                   For decades, I have studied and portrayed human characters. Today, I bring that experience beyond the stage — to understanding real people, their emotions, behaviours, and relationships.
                 </p>
 
-                <p className="p-4 rounded-2xl bg-[#F0F8F6] border-l-4 border-[#166D74] italic font-serif text-[#0F5D66]">
+                <p className="p-4 rounded-2xl bg-[#EBF7F7] border-l-4 border-[#00AAC1] italic font-serif text-[#006B7D]">
                   My focus is on couple relationships, because I believe healthy relationships are at the foundation of individual happiness and a happier society.
                 </p>
 
-                <p className="font-semibold text-[#166D74]">
+                <p className="font-bold text-[#00AAC1]">
                   My mission is to be a guardian of couple relationships — helping couples understand each other, navigate differences, and build healthier, more meaningful relationships.
                 </p>
               </div>
@@ -87,10 +88,7 @@ export default function About() {
               <div className="pt-4 flex items-center gap-4">
                 <Link
                   href="/book"
-                  className="px-8 py-4 rounded-full font-sans text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] inline-flex items-center gap-2"
-                  style={{
-                    background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
-                  }}
+                  className="px-8 py-3.5 rounded-full font-sans text-sm font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] inline-flex items-center gap-2"
                 >
                   <span>Book a Consultation</span>
                   <ArrowRight className="w-4 h-4" />
@@ -98,14 +96,14 @@ export default function About() {
 
                 <Link
                   href="#stories"
-                  className="px-6 py-4 rounded-full font-sans text-sm font-semibold text-[#0F5D66] bg-white border border-[#D0EAE4] hover:bg-[#EAF5F3] transition-all"
+                  className="px-6 py-3.5 rounded-full font-sans text-sm font-bold text-[#00AAC1] bg-white border-2 border-[#00AAC1] hover:bg-[#EBF7F7] transition-all"
                 >
                   <span>Read Stories</span>
                 </Link>
               </div>
             </motion.div>
 
-            {/* Right: Cutout Photo with Frame */}
+            {/* Right: Original Professional Photo with full background */}
             <motion.div
               className="lg:col-span-5 flex justify-center"
               initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -116,26 +114,26 @@ export default function About() {
                 <div
                   className="absolute inset-0 rounded-[36px] -z-10 blur-xl opacity-60 pointer-events-none"
                   style={{
-                    background: 'radial-gradient(circle at center, rgba(201,166,70,0.3) 0%, rgba(22,109,116,0.15) 60%, transparent 80%)'
+                    background: 'radial-gradient(circle at center, rgba(0,170,193,0.2) 0%, rgba(0,107,125,0.1) 60%, transparent 80%)'
                   }}
                 />
                 
                 <div
-                  className="relative w-full h-full rounded-[32px] overflow-hidden shadow-2xl group flex items-center justify-center bg-gradient-to-b from-[#F2F8F6] to-[#E5F1EE]"
+                  className="relative w-full h-full rounded-[32px] overflow-hidden shadow-2xl group flex items-center justify-center bg-gray-100"
                   style={{
                     border: '4px solid rgba(255, 255, 255, 0.95)',
-                    boxShadow: '0 24px 60px -12px rgba(22, 109, 116, 0.18)'
+                    boxShadow: '0 24px 60px -12px rgba(0, 170, 193, 0.18)'
                   }}
                 >
                   <img
-                    src={abhayImage}
-                    alt="Abhay Harpale"
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                    src={abhay}
+                    alt="Abhay Harpale — Founder & Relationship Guardian"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
                   />
                   
-                  <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-[#D0EAE4] shadow-md text-left">
-                    <h4 className="font-serif text-lg font-bold text-[#0F5D66]">Abhay Harpale</h4>
-                    <p className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#B8943A]">Gold Medalist · Relationship Guardian</p>
+                  <div className="absolute bottom-5 left-5 right-5 p-4 rounded-2xl bg-white/95 backdrop-blur-md border border-[#00AAC1]/20 shadow-md text-left z-10">
+                    <h4 className="font-serif text-lg font-bold text-[#1F2937]">Abhay Harpale</h4>
+                    <p className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#00AAC1]">Gold Medalist · Relationship Guardian</p>
                   </div>
                 </div>
               </div>

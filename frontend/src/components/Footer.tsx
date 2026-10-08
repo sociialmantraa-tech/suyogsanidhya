@@ -62,19 +62,19 @@ export default function Footer() {
 
             {/* Left Brand Statement */}
             <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#D0EAE4] shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-[#B8943A]" />
-                <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#166D74]">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#00AAC1]/20 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#00AAC1]" />
+                <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#006B7D]">
                   Abhay Harpale · Suyog Saanidhya
                 </span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#0F5D66] font-normal leading-[1.15] tracking-tight">
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#1F2937] font-normal leading-[1.15] tracking-tight">
                 Where Relationships <br className="hidden sm:inline" />
-                <span className="italic font-light text-[#B8943A]">Awaken to Harmony.</span>
+                <span className="italic font-light text-[#00AAC1]">Awaken to Harmony.</span>
               </h2>
               <div className="pt-2">
-                <p className="font-serif italic text-lg text-[#166D74] mb-0.5">संवादात् सान्निध्यम्</p>
-                <p className="font-sans text-xs tracking-wider text-[#71858A] uppercase">
+                <p className="font-serif italic text-lg text-[#006B7D] mb-0.5">संवादात् सान्निध्यम्</p>
+                <p className="font-sans text-xs tracking-wider text-[#6B7280] uppercase">
                   From conscious dialogue emerges enduring connection.
                 </p>
               </div>
@@ -89,30 +89,23 @@ export default function Footer() {
               transition={{ duration: 0.6 }}
             >
               <div
-                className="p-8 rounded-3xl relative overflow-hidden backdrop-blur-md shadow-[0_12px_40px_-10px_rgba(22,109,116,0.08)]"
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.85)',
-                  border: '1px solid rgba(22, 109, 116, 0.12)',
-                }}
+                className="p-8 rounded-3xl relative overflow-hidden backdrop-blur-md shadow-sm bg-white border border-[#00AAC1]/15"
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#166D74]">
+                  <span className="w-2 h-2 rounded-full bg-[#00AAC1] animate-pulse" />
+                  <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#006B7D]">
                     Private Consultations Available
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl text-[#0F5D66] mb-2 font-medium">
+                <h3 className="font-serif text-2xl text-[#1F2937] mb-2 font-medium">
                   Ready for Meaningful Clarity?
                 </h3>
-                <p className="font-sans text-sm text-[#5E6E72] leading-relaxed mb-6">
+                <p className="font-sans text-sm text-[#4B5563] leading-relaxed mb-6">
                   Schedule a private 1-on-1 or couples session crafted to restore mutual understanding and intimacy.
                 </p>
                 <Link
                   href="/book"
-                  className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-full font-sans text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.01]"
-                  style={{
-                    background: 'linear-gradient(135deg, #166D74 0%, #0F5D66 100%)',
-                  }}
+                  className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-full font-sans text-sm font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
                 >
                   <span>Begin Your Journey</span>
                   <ArrowRight className="w-4 h-4" />

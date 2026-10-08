@@ -75,28 +75,32 @@ export default function Button({
 
   const variantStyles: Record<string, React.CSSProperties> = {
     primary: {
-      backgroundColor: '#166D74',
+      background: 'linear-gradient(135deg, #00C4D9 0%, #00AAC1 50%, #008496 100%)',
       color: '#FFFFFF',
-      border: '1.5px solid #166D74',
-      boxShadow: '0 4px 20px rgba(22, 109, 116, 0.2)',
+      border: 'none',
+      borderRadius: '9999px',
+      boxShadow: '0 4px 18px rgba(0, 170, 193, 0.32), 0 2px 6px rgba(0, 170, 193, 0.18)',
     },
     outline: {
       backgroundColor: 'transparent',
-      color: '#166D74',
-      border: '1.5px solid rgba(64, 192, 192, 0.4)',
-      boxShadow: 'none',
+      color: '#00AAC1',
+      border: '2px solid #00AAC1',
+      borderRadius: '9999px',
+      boxShadow: '0 2px 10px rgba(0, 170, 193, 0.08)',
     },
     secondary: {
       backgroundColor: 'transparent',
-      color: '#166D74',
-      border: '1.5px solid rgba(64, 192, 192, 0.4)',
-      boxShadow: 'none',
+      color: '#00AAC1',
+      border: '2px solid #00AAC1',
+      borderRadius: '9999px',
+      boxShadow: '0 2px 10px rgba(0, 170, 193, 0.08)',
     },
     white: {
       backgroundColor: '#FFFFFF',
-      color: '#166D74',
+      color: '#006B7D',
       border: '1.5px solid #FFFFFF',
-      boxShadow: '0 4px 14px rgba(22, 109, 116, 0.08)',
+      borderRadius: '9999px',
+      boxShadow: '0 4px 16px rgba(0, 170, 193, 0.15)',
     },
   };
 

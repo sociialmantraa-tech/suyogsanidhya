@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar as CalendarIcon, Clock, User, Mail, Phone, MessageSquare, ArrowRight, ArrowLeft, CreditCard, ShieldCheck } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, User, Mail, Phone, MessageSquare, ArrowRight, ArrowLeft, CreditCard, ShieldCheck, Check, Lock, Sparkles } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { api } from '../utils/api';
 import { usePublicData } from '../context/PublicDataContext';
@@ -114,13 +114,24 @@ export default function Booking() {
 
   const getMinDate = () => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    // Booking calendar operational start date: 08th November
+    const startAvailableDate = new Date(today.getFullYear(), 10, 8); // Month 10 = November (0-indexed)
+    
+    const targetDate = today < startAvailableDate ? startAvailableDate : today;
+    const year = targetDate.getFullYear();
+    const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const day = String(targetDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const getMaxDate = () => {
-    const max = new Date();
-    max.setDate(max.getDate() + 30);
-    return max.toISOString().split('T')[0];
+    const minStr = getMinDate();
+    const minDateObj = new Date(minStr);
+    minDateObj.setDate(minDateObj.getDate() + 60); // Allow selection up to 60 days from start date
+    const year = minDateObj.getFullYear();
+    const month = String(minDateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(minDateObj.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const formatSlotTime = (timeStr: string) => {
@@ -155,9 +166,14 @@ export default function Booking() {
 
   const handleNextStep = () => {
     setBookingError('');
-    if (step === 1 && !selectedProgram) {
-      setBookingError("Please select a consultation type to continue.");
-      return;
+    if (step === 1) {
+      if (!selectedProgram) {
+        setBookingError("Please select a consultation type to continue.");
+        return;
+      }
+      if (!bookingDate) {
+        setBookingDate(getMinDate());
+      }
     }
     if (step === 2 && (!bookingDate || !selectedSlot)) {
       setBookingError("Please pick both a date and an available slot.");
@@ -219,103 +235,152 @@ export default function Booking() {
     );
   }
 
+  const stepsList = [
+    { num: 1, label: 'Consultation' },
+    { num: 2, label: 'Date & Time' },
+    { num: 3, label: 'Your Details' },
+    { num: 4, label: 'Review & Pay' },
+  ];
+
   return (
     <BackgroundWrapper
       variant="primary"
       patternType="concentric"
-      className="pt-32 pb-20"
+      className="pt-32 pb-24"
     >
-      <div className="max-w-3xl mx-auto px-6 md:px-12 space-y-12 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-10 relative z-10">
         
-        {/* Page Titles */}
-        <SectionReveal className="text-center space-y-4">
-          <span className="eyebrow-label uppercase" style={{ color: '#C9A646' }}>PRIVATE CONSULTATION</span>
-          <h1 className="font-serif text-[#166D74]">Book Your Consultation</h1>
-          <p className="font-sans text-sm leading-relaxed" style={{ color: '#5F6C72', maxWidth: '480px', margin: '0 auto' }}>
-            Choose the guidance area that best matches your current needs, select a convenient time and complete your booking securely.
+        {/* Page Header */}
+        <SectionReveal className="text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#00AAC1]/20 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-[#00AAC1]" />
+            <span className="font-sans text-[11px] font-bold uppercase tracking-widest text-[#006B7D]">
+              Private Consultation
+            </span>
+          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1F2937] tracking-tight">
+            Book Your Guidance Session
+          </h1>
+          <p className="font-sans text-sm sm:text-base text-[#4B5563] max-w-lg mx-auto leading-relaxed">
+            Select your consultation area, pick your preferred date and time, and securely confirm your session slot.
           </p>
         </SectionReveal>
 
-        {/* Human Friendly Progress Bar */}
-        <SectionReveal className="space-y-4">
-          <div className="grid grid-cols-4 text-center text-[10px] md:text-xs font-sans font-bold uppercase tracking-wider text-secondaryText">
-            <span style={{ color: step >= 1 ? '#008B8B' : '#74858C' }}>1. Consultation</span>
-            <span style={{ color: step >= 2 ? '#008B8B' : '#74858C' }}>2. Date &amp; Time</span>
-            <span style={{ color: step >= 3 ? '#008B8B' : '#74858C' }}>3. Your Details</span>
-            <span style={{ color: step >= 4 ? '#008B8B' : '#74858C' }}>4. Review &amp; Pay</span>
-          </div>
-          <div className="w-full h-[3px] rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(64,192,192,0.12)' }}>
-            <div 
-              className="h-full transition-all duration-500 rounded-full" 
-              style={{ width: `${(step / 4) * 100}%`, backgroundColor: '#008B8B' }}
-            ></div>
+        {/* Stepped Progress Bar */}
+        <SectionReveal className="w-full">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-[#00AAC1]/15 shadow-sm">
+            <div className="grid grid-cols-4 gap-2 relative">
+              {/* Line connector background */}
+              <div className="absolute top-4 sm:top-5 left-[12%] right-[12%] h-[2px] bg-[#EBF7F7] -z-0" />
+              
+              {stepsList.map((s) => {
+                const isActive = step === s.num;
+                const isCompleted = step > s.num;
+                return (
+                  <div key={s.num} className="flex flex-col items-center text-center relative z-10 space-y-2">
+                    <div
+                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-sans text-xs sm:text-sm font-bold transition-all duration-300 ${
+                        isCompleted
+                          ? 'bg-gradient-to-r from-[#00C4D9] to-[#008496] text-white shadow-md'
+                          : isActive
+                          ? 'bg-gradient-to-r from-[#00C4D9] to-[#008496] text-white ring-4 ring-[#00AAC1]/20 shadow-lg scale-105'
+                          : 'bg-[#F4F8F8] text-[#6B7280] border border-[#00AAC1]/20'
+                      }`}
+                    >
+                      {isCompleted ? <Check className="w-4 h-4 text-white" /> : s.num}
+                    </div>
+                    <span
+                      className={`font-sans text-[10px] sm:text-xs font-bold uppercase tracking-wider ${
+                        isActive ? 'text-[#00AAC1]' : isCompleted ? 'text-[#006B7D]' : 'text-[#6B7280]'
+                      }`}
+                    >
+                      {s.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </SectionReveal>
 
+        {/* Error Alert */}
         {bookingError && (
-          <SectionReveal className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 text-sm font-sans text-left rounded-r-xl">
+          <SectionReveal className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 text-sm font-sans text-left rounded-r-2xl shadow-sm">
             {bookingError}
           </SectionReveal>
         )}
 
+        {/* Main Card Container */}
         <SectionReveal 
-          className="p-8 md:p-12 shadow-lg"
-          style={{
-            backgroundColor: '#FFFCF8',
-            borderRadius: '28px',
-            border: '1.5px solid rgba(64,192,192,0.1)',
-          }}
+          className="bg-white rounded-[32px] p-6 sm:p-10 border border-[#00AAC1]/15 shadow-2xl shadow-[#00AAC1]/5"
         >
           
           {/* STEP 1: SELECT CONSULTATION */}
           {step === 1 && (
             <div className="space-y-6 animate-fade-in text-left">
-              <h2 className="font-serif text-xl pb-4 font-semibold" style={{ color: '#176F78', borderBottom: '1px solid rgba(64,192,192,0.12)' }}>
-                Select Consultation Type
-              </h2>
+              <div className="pb-4 border-b border-slate-100">
+                <h2 className="font-serif text-2xl font-semibold text-[#1F2937]">
+                  Select Consultation Type
+                </h2>
+                <p className="font-sans text-xs text-[#4B5563] mt-1">
+                  Choose the specialized guidance area suited for your current relationship or personal situation.
+                </p>
+              </div>
+
               <div className="grid grid-cols-1 gap-4">
                 {programs.map((prog: Program) => {
                   const isSelected = selectedProgram?.id === prog.id;
                   return (
-                    <button
+                    <div
                       key={prog.id}
                       onClick={() => setSelectedProgram(prog)}
-                      className="w-full text-left p-6 border transition-all duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-2xl"
-                      style={isSelected ? {
-                        borderColor: '#008B8B',
-                        backgroundColor: 'rgba(64,192,192,0.04)',
-                        boxShadow: '0 8px 24px rgba(23,111,120,0.03)'
-                      } : {
-                        borderColor: 'rgba(64,192,192,0.12)',
-                        backgroundColor: '#FFFCF8'
-                      }}
+                      className={`p-6 rounded-2xl border transition-all duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 cursor-pointer ${
+                        isSelected
+                          ? 'border-[#00AAC1] bg-[#EBF7F7] shadow-md ring-2 ring-[#00AAC1]/20'
+                          : 'border-slate-100 bg-white hover:border-[#00AAC1]/40 hover:bg-[#F4F8F8]'
+                      }`}
                     >
-                      <div className="space-y-2 max-w-lg">
-                        <span className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#C9A646' }}>{prog.category}</span>
-                        <h4 className="font-serif text-base font-semibold" style={{ color: '#176F78' }}>{prog.title}</h4>
-                        <p className="font-sans text-xs leading-relaxed line-clamp-2" style={{ color: '#5E6E72' }}>{prog.shortDescription}</p>
-                        <span 
-                          className="inline-block text-[10px] font-sans font-semibold uppercase tracking-wider px-2.5 py-1 mt-2 rounded-full"
-                          style={{ backgroundColor: '#FFFFF5', color: '#008B8B', border: '1px solid rgba(64,192,192,0.15)' }}
-                        >
-                          {prog.duration} Minutes
+                      <div className="space-y-2 max-w-xl">
+                        <div className="flex items-center gap-2">
+                          <span className="w-4 h-4 rounded-full border border-[#00AAC1] flex items-center justify-center shrink-0">
+                            {isSelected && <span className="w-2 h-2 rounded-full bg-[#00AAC1]" />}
+                          </span>
+                          <span className="text-[10px] uppercase font-bold tracking-widest text-[#00AAC1]">
+                            {prog.category}
+                          </span>
+                        </div>
+                        <h4 className="font-serif text-lg font-bold text-[#1F2937] pl-6">
+                          {prog.title}
+                        </h4>
+                        <p className="font-sans text-xs text-[#4B5563] leading-relaxed line-clamp-2 pl-6">
+                          {prog.shortDescription}
+                        </p>
+                        <div className="pl-6 pt-1">
+                          <span className="inline-block text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#EBF7F7] text-[#00AAC1] border border-[#00AAC1]/20">
+                            {prog.duration} Minutes Session
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0 self-end md:self-center">
+                        <span className="font-serif text-xl font-bold text-[#00AAC1]">
+                          INR {prog.salePrice || prog.price}
                         </span>
                       </div>
-                      <div className="text-right shrink-0">
-                        <span className="font-sans text-[16px] font-bold" style={{ color: '#008B8B' }}>INR {prog.salePrice || prog.price}</span>
-                      </div>
-                    </button>
+                    </div>
                   );
                 })}
               </div>
               
-              <div className="pt-6 flex justify-end" style={{ borderTop: '1px solid rgba(64,192,192,0.12)' }}>
+              <div className="pt-6 flex justify-end border-t border-slate-100">
                 <button 
                   onClick={handleNextStep}
                   disabled={!selectedProgram}
-                  className={`btn btn-primary px-8 ${!selectedProgram ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`px-8 py-3.5 rounded-full font-sans text-sm font-bold text-white shadow-md transition-all duration-300 flex items-center gap-2 ${
+                    !selectedProgram ? 'opacity-50 cursor-not-allowed bg-slate-300' : 'bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] hover:scale-[1.02] cursor-pointer shadow-md hover:shadow-xl'
+                  }`}
                 >
-                  Continue to Select Slot <ArrowRight className="ml-2 w-4 h-4" />
+                  <span>Continue to Select Slot</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -324,12 +389,12 @@ export default function Booking() {
           {/* STEP 2: DATE & TIME */}
           {step === 2 && selectedProgram && (
             <div className="space-y-8 animate-fade-in text-left">
-              <div className="flex justify-between items-center pb-4" style={{ borderBottom: '1px solid rgba(64,192,192,0.12)' }}>
-                <h2 className="font-serif text-xl font-semibold" style={{ color: '#176F78' }}>Choose Date &amp; Time</h2>
-                <span 
-                  className="font-sans text-[11px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full"
-                  style={{ backgroundColor: '#FFFFF5', color: '#008B8B', border: '1px solid rgba(64,192,192,0.15)' }}
-                >
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 gap-2">
+                <div>
+                  <h2 className="font-serif text-2xl font-semibold text-[#1F2937]">Choose Date &amp; Time</h2>
+                  <p className="font-sans text-xs text-[#4B5563] mt-1">Select an available date and suitable time slot for your consultation.</p>
+                </div>
+                <span className="font-sans text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-[#EBF7F7] text-[#00AAC1] border border-[#00AAC1]/20 shrink-0">
                   {selectedProgram.title}
                 </span>
               </div>
@@ -337,71 +402,86 @@ export default function Booking() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Date Picker */}
                 <div className="space-y-3">
-                  <label className="font-sans text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#176F78' }}>
-                    <CalendarIcon className="w-4 h-4" style={{ color: '#40C0C0' }} />
-                    Select Date
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="font-sans text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-[#1F2937]">
+                      <CalendarIcon className="w-4 h-4 text-[#00AAC1]" />
+                      Select Date
+                    </label>
+                    <span className="text-[10px] font-sans font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EBF7F7] text-[#00AAC1] border border-[#00AAC1]/20">
+                      Available from 8th Nov
+                    </span>
+                  </div>
                   <input
                     type="date"
                     min={getMinDate()}
                     max={getMaxDate()}
-                    value={bookingDate}
+                    value={bookingDate || getMinDate()}
                     onChange={(e) => setBookingDate(e.target.value)}
-                    className="w-full border p-3.5 focus:outline-none focus:border-[#008B8B] rounded-xl font-sans text-sm transition-all"
-                    style={{ backgroundColor: 'rgba(255,255,245,0.4)', borderColor: 'rgba(64,192,192,0.2)' }}
+                    className="w-full border border-[#00AAC1]/25 p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-xl font-sans text-sm bg-white text-[#1F2937] font-medium shadow-xs transition-all"
                   />
+                  <p className="text-[11px] font-sans text-[#6B7280]">
+                    * Consultation calendar opens for session bookings starting 8th November 2026.
+                  </p>
                 </div>
 
                 {/* Slots Picker */}
                 <div className="space-y-3">
-                  <label className="font-sans text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#176F78' }}>
-                    <Clock className="w-4 h-4" style={{ color: '#40C0C0' }} />
+                  <label className="font-sans text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-[#1F2937]">
+                    <Clock className="w-4 h-4 text-[#00AAC1]" />
                     Available Slots
                   </label>
                   
                   {slotsLoading ? (
-                    <div className="py-8 text-center text-xs text-secondaryText">Retrieving slots...</div>
+                    <div className="py-8 text-center text-xs text-[#6B7280] flex items-center justify-center gap-2">
+                      <span className="w-4 h-4 border-2 border-[#00AAC1] border-t-transparent rounded-full animate-spin" />
+                      <span>Retrieving available slots...</span>
+                    </div>
                   ) : bookingDate ? (
                     getFilteredSlots().length > 0 ? (
-                      <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto pr-2">
-                        {getFilteredSlots().map(slot => (
-                          <button
-                            key={slot}
-                            onClick={() => setSelectedSlot(slot)}
-                            className="p-3 text-center text-xs font-semibold uppercase tracking-wider transition-all border rounded-xl"
-                            style={selectedSlot === slot ? {
-                              backgroundColor: '#008B8B',
-                              borderColor: '#008B8B',
-                              color: '#FFFFFF'
-                            } : {
-                              borderColor: 'rgba(64,192,192,0.2)',
-                              color: '#5E6E72',
-                              backgroundColor: '#FFFCF8'
-                            }}
-                          >
-                            {formatSlotTime(slot)}
-                          </button>
-                        ))}
+                      <div className="grid grid-cols-2 gap-3 max-h-52 overflow-y-auto pr-1">
+                        {getFilteredSlots().map(slot => {
+                          const isSlotSelected = selectedSlot === slot;
+                          return (
+                            <button
+                              key={slot}
+                              type="button"
+                              onClick={() => setSelectedSlot(slot)}
+                              className={`p-3 text-center text-xs font-bold uppercase tracking-wider transition-all border rounded-full cursor-pointer ${
+                                isSlotSelected
+                                  ? 'bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] border-transparent text-white shadow-md scale-[1.03]'
+                                  : 'border-[#00AAC1]/20 text-[#4B5563] bg-white hover:border-[#00AAC1] hover:bg-[#EBF7F7] hover:text-[#00AAC1]'
+                              }`}
+                            >
+                              {formatSlotTime(slot)}
+                            </button>
+                          );
+                        })}
                       </div>
                     ) : (
-                      <p className="text-xs text-secondaryText pt-2 italic">All slots are booked out or expired for today. Please pick another date.</p>
+                      <p className="text-xs text-[#6B7280] pt-2 italic">All slots are booked out or expired for today. Please pick another date.</p>
                     )
                   ) : (
-                    <p className="text-xs text-secondaryText pt-2 italic">Please select a date first to view slots.</p>
+                    <p className="text-xs text-[#6B7280] pt-2 italic">Please select a date first to view slots.</p>
                   )}
                 </div>
               </div>
 
-              <div className="flex justify-between items-center pt-8 border-t" style={{ borderColor: 'rgba(64,192,192,0.12)' }}>
-                <button onClick={handlePrevStep} className="btn btn-outline px-6">
-                  <ArrowLeft className="mr-2 w-4 h-4" /> Back
+              <div className="flex justify-between items-center pt-8 border-t border-slate-100">
+                <button 
+                  onClick={handlePrevStep} 
+                  className="px-6 py-3 rounded-full border-2 border-[#00AAC1] font-sans text-xs sm:text-sm font-bold text-[#00AAC1] hover:bg-[#EBF7F7] transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" /> Back
                 </button>
                 <button 
                   onClick={handleNextStep}
                   disabled={!bookingDate || !selectedSlot}
-                  className={`btn btn-primary px-6 ${(!bookingDate || !selectedSlot) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`px-8 py-3.5 rounded-full font-sans text-xs sm:text-sm font-bold text-white shadow-md transition-all duration-300 flex items-center gap-2 ${
+                    (!bookingDate || !selectedSlot) ? 'opacity-50 cursor-not-allowed bg-slate-300' : 'bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] hover:scale-[1.02] cursor-pointer shadow-md hover:shadow-xl'
+                  }`}
                 >
-                  Next Step <ArrowRight className="ml-2 w-4 h-4" />
+                  <span>Next Step</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -410,101 +490,105 @@ export default function Booking() {
           {/* STEP 3: CUSTOMER INFO */}
           {step === 3 && selectedProgram && (
             <div className="space-y-8 animate-fade-in text-left">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 gap-2" style={{ borderBottom: '1px solid rgba(64,192,192,0.12)' }}>
-                <h2 className="font-serif text-xl font-semibold" style={{ color: '#176F78' }}>Your Details</h2>
-                <span 
-                  className="font-sans text-[11px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full"
-                  style={{ backgroundColor: '#FFFFF5', color: '#C9A646', border: '1px solid rgba(64,192,192,0.15)' }}
-                >
-                  Selected: {bookingDate} @ {formatSlotTime(selectedSlot)}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 gap-2">
+                <div>
+                  <h2 className="font-serif text-2xl font-semibold text-[#1F2937]">Your Contact Details</h2>
+                  <p className="font-sans text-xs text-[#4B5563] mt-1">Provide authentic contact information for session confirmation and private video link access.</p>
+                </div>
+                <span className="font-sans text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-[#EBF7F7] text-[#00AAC1] border border-[#00AAC1]/20 shrink-0">
+                  {bookingDate} @ {formatSlotTime(selectedSlot)}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-secondaryText">Full Name *</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#1F2937] flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-[#00AAC1]" /> Full Name *
+                  </label>
                   <input
                     type="text"
                     value={customerInfo.name}
                     onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full border p-3.5 focus:outline-none focus:border-[#008B8B] rounded-xl text-sm transition-all shadow-sm"
-                    style={{
-                      backgroundColor: 'rgba(255,255,245,0.4)',
-                      borderColor: formErrors.name ? '#EF4444' : 'rgba(64,192,192,0.2)'
-                    }}
-                    placeholder="Enter your full name"
+                    className={`w-full border p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-xl text-sm transition-all shadow-xs bg-white ${
+                      formErrors.name ? 'border-red-500' : 'border-[#00AAC1]/25'
+                    }`}
+                    placeholder="e.g. Rahul Sharma"
                   />
                   {formErrors.name && <p className="text-red-500 text-[11px] mt-1">{formErrors.name}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-secondaryText">Email Address *</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#1F2937] flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-[#00AAC1]" /> Email Address *
+                  </label>
                   <input
                     type="email"
                     value={customerInfo.email}
                     onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full border p-3.5 focus:outline-none focus:border-[#008B8B] rounded-xl text-sm transition-all shadow-sm"
-                    style={{
-                      backgroundColor: 'rgba(255,255,245,0.4)',
-                      borderColor: formErrors.email ? '#EF4444' : 'rgba(64,192,192,0.2)'
-                    }}
+                    className={`w-full border p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-xl text-sm transition-all shadow-xs bg-white ${
+                      formErrors.email ? 'border-red-500' : 'border-[#00AAC1]/25'
+                    }`}
                     placeholder="name@domain.com"
                   />
                   {formErrors.email && <p className="text-red-500 text-[11px] mt-1">{formErrors.email}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-secondaryText">Phone Number *</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#1F2937] flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[#00AAC1]" /> Phone Number *
+                  </label>
                   <div className="flex">
                     <input
                       type="text"
                       value={customerInfo.countryCode}
                       onChange={(e) => setCustomerInfo(prev => ({ ...prev, countryCode: e.target.value }))}
-                      className="w-16 border border-r-0 p-3.5 focus:outline-none focus:border-[#008B8B] rounded-l-xl text-sm text-center transition-all shadow-sm font-semibold"
-                      style={{ backgroundColor: 'rgba(255,255,245,0.4)', borderColor: 'rgba(64,192,192,0.2)', color: '#176F78' }}
+                      className="w-16 border border-r-0 border-[#00AAC1]/25 p-3.5 focus:outline-none focus:border-[#00AAC1] rounded-l-xl text-sm text-center font-bold text-[#00AAC1] bg-[#EBF7F7]"
                     />
                     <input
                       type="tel"
                       value={customerInfo.phone}
                       onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
-                      className="w-full border p-3.5 focus:outline-none focus:border-[#008B8B] rounded-r-xl text-sm transition-all shadow-sm"
-                      style={{
-                        backgroundColor: 'rgba(255,255,245,0.4)',
-                        borderColor: formErrors.phone ? '#EF4444' : 'rgba(64,192,192,0.2)'
-                      }}
-                      placeholder="9152962255"
+                      className={`w-full border border-l-0 p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-r-xl text-sm transition-all shadow-xs bg-white ${
+                        formErrors.phone ? 'border-red-500' : 'border-[#00AAC1]/25'
+                      }`}
+                      placeholder="9819000000"
                     />
                   </div>
                   {formErrors.phone && <p className="text-red-500 text-[11px] mt-1">{formErrors.phone}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-secondaryText">Optional Message / Concerns</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#1F2937] flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5 text-[#00AAC1]" /> Primary Concerns / Notes (Optional)
+                  </label>
                   <textarea
                     value={customerInfo.concernMessage}
                     onChange={(e) => setCustomerInfo(prev => ({ ...prev, concernMessage: e.target.value }))}
-                    className="w-full border p-3.5 focus:outline-none focus:border-[#008B8B] rounded-xl text-sm h-24 resize-none transition-all shadow-sm"
-                    style={{ backgroundColor: 'rgba(255,255,245,0.4)', borderColor: 'rgba(64,192,192,0.2)' }}
-                    placeholder="Briefly describe what you would like to address during the guidance consultation."
+                    className="w-full border border-[#00AAC1]/25 p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-xl text-sm h-24 resize-none transition-all shadow-xs bg-white"
+                    placeholder="Briefly share what key relationship areas or questions you would like to address."
                   ></textarea>
                 </div>
               </div>
 
               {/* Confidential Privacy Note */}
-              <div 
-                className="flex items-center gap-2 p-4 text-xs font-sans rounded-2xl"
-                style={{ backgroundColor: '#FFFFF5', border: '1px solid rgba(64,192,192,0.15)', color: '#5E6E72' }}
-              >
-                <ShieldCheck className="w-5 h-5 shrink-0" style={{ color: '#40C0C0' }} />
-                <span><strong>Privacy Note:</strong> Your contact information and consultation content are strictly confidential. We never share your data.</span>
+              <div className="flex items-center gap-3 p-4 text-xs font-sans rounded-2xl bg-[#EBF7F7] border border-[#00AAC1]/20 text-[#006B7D]">
+                <ShieldCheck className="w-5 h-5 text-[#00AAC1] shrink-0" />
+                <span><strong>Absolute Confidentiality:</strong> Your contact details and session discussion are strictly private and never shared with any third party.</span>
               </div>
 
-              <div className="flex justify-between items-center pt-8 border-t" style={{ borderColor: 'rgba(64,192,192,0.12)' }}>
-                <button onClick={handlePrevStep} className="btn btn-outline px-6">
-                  <ArrowLeft className="mr-2 w-4 h-4" /> Back
+              <div className="flex justify-between items-center pt-8 border-t border-slate-100">
+                <button 
+                  onClick={handlePrevStep} 
+                  className="px-6 py-3 rounded-full border-2 border-[#00AAC1] font-sans text-xs sm:text-sm font-bold text-[#00AAC1] hover:bg-[#EBF7F7] transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" /> Back
                 </button>
-                <button onClick={handleNextStep} className="btn btn-primary px-6">
-                  Next Step <ArrowRight className="ml-2 w-4 h-4" />
+                <button 
+                  onClick={handleNextStep}
+                  className="px-8 py-3.5 rounded-full font-sans text-xs sm:text-sm font-bold text-white shadow-md bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] hover:scale-[1.02] transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-xl"
+                >
+                  <span>Review &amp; Pay</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -513,73 +597,148 @@ export default function Booking() {
           {/* STEP 4: REVIEW & PAYMENT */}
           {step === 4 && selectedProgram && (
             <div className="space-y-8 animate-fade-in font-sans text-left">
-              <div className="pb-4" style={{ borderBottom: '1px solid rgba(64,192,192,0.12)' }}>
-                <h2 className="font-serif text-xl font-semibold" style={{ color: '#176F78' }}>Review &amp; Payment</h2>
-                <p className="text-xs text-secondaryText mt-1">Please review all consultation parameters before initiating payments.</p>
+              <div className="pb-4 border-b border-slate-100">
+                <h2 className="font-serif text-2xl font-semibold text-[#1F2937]">Review &amp; Payment</h2>
+                <p className="text-xs text-[#4B5563] mt-1">Verify your session details before initializing secure online payment.</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-bgSecondary">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
-                {/* Left: Summary */}
-                <div className="space-y-4">
-                  <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#C9A646' }}>Schedule Details</h4>
-                  <div className="space-y-2.5 text-sm text-secondaryText">
-                    <p><strong style={{ color: '#176F78' }}>Program:</strong> {selectedProgram.title}</p>
-                    <p><strong style={{ color: '#176F78' }}>Duration:</strong> {selectedProgram.duration} Minutes</p>
-                    <p><strong style={{ color: '#176F78' }}>Date:</strong> {bookingDate}</p>
-                    <p><strong style={{ color: '#176F78' }}>Time slot:</strong> {formatSlotTime(selectedSlot)} (IST)</p>
+                {/* Left Column: Booking & Contact Summary */}
+                <div className="lg:col-span-7 space-y-6">
+                  
+                  {/* Schedule Details Card */}
+                  <div className="bg-[#F4F8F8] p-6 rounded-2xl border border-[#00AAC1]/20 space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#00AAC1]/15 pb-2">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#006B7D]">Schedule Summary</h4>
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#00AAC1] border border-[#00AAC1]/20">
+                        Confirmed Slot
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                      <div>
+                        <span className="text-[#6B7280] block">Program</span>
+                        <strong className="text-[#1F2937] font-serif text-sm block">{selectedProgram.title}</strong>
+                      </div>
+                      <div>
+                        <span className="text-[#6B7280] block">Duration</span>
+                        <strong className="text-[#1F2937] text-sm block">{selectedProgram.duration} Minutes</strong>
+                      </div>
+                      <div>
+                        <span className="text-[#6B7280] block">Selected Date</span>
+                        <strong className="text-[#1F2937] text-sm block">{bookingDate}</strong>
+                      </div>
+                      <div>
+                        <span className="text-[#6B7280] block">Time Slot</span>
+                        <strong className="text-[#1F2937] text-sm block">{formatSlotTime(selectedSlot)} (IST)</strong>
+                      </div>
+                    </div>
                   </div>
 
-                  <h4 className="text-xs font-bold uppercase tracking-wider pt-4" style={{ color: '#C9A646' }}>Your Contact Information</h4>
-                  <div className="space-y-2.5 text-sm text-secondaryText">
-                    <p><strong style={{ color: '#176F78' }}>Name:</strong> {customerInfo.name}</p>
-                    <p><strong style={{ color: '#176F78' }}>Email:</strong> {customerInfo.email}</p>
-                    <p><strong style={{ color: '#176F78' }}>Phone:</strong> {customerInfo.countryCode} {customerInfo.phone}</p>
+                  {/* Client Details Card */}
+                  <div className="bg-[#F4F8F8] p-6 rounded-2xl border border-[#00AAC1]/20 space-y-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#006B7D] border-b border-[#00AAC1]/15 pb-2">
+                      Client Contact Information
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                      <div>
+                        <span className="text-[#6B7280] block">Name</span>
+                        <strong className="text-[#1F2937] text-sm block">{customerInfo.name}</strong>
+                      </div>
+                      <div>
+                        <span className="text-[#6B7280] block">Email</span>
+                        <strong className="text-[#1F2937] text-sm block truncate">{customerInfo.email}</strong>
+                      </div>
+                      <div>
+                        <span className="text-[#6B7280] block">Phone</span>
+                        <strong className="text-[#1F2937] text-sm block">{customerInfo.countryCode} {customerInfo.phone}</strong>
+                      </div>
+                    </div>
                   </div>
+
                 </div>
 
-                {/* Right: Price calculation */}
-                <div className="space-y-6 md:pl-8 pt-6 md:pt-0" style={{ borderColor: 'rgba(64,192,192,0.12)' }}>
-                  <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#C9A646' }}>Financial breakdown</h4>
-                  <div className="space-y-3 text-sm pb-4" style={{ borderBottom: '1px solid rgba(64,192,192,0.12)' }}>
-                    <div className="flex justify-between">
-                      <span className="text-secondaryText">Consultation Fee</span>
-                      <span style={{ color: '#176F78', fontWeight: 600 }}>INR {((selectedProgram.salePrice || selectedProgram.price) / 1.18).toFixed(2)}</span>
+                {/* Right Column: Financial Breakdown & High-Impact Payment Button */}
+                <div className="lg:col-span-5 bg-[#F4F8F8] p-6 rounded-2xl border border-[#00AAC1]/20 space-y-5">
+                  
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#006B7D] border-b border-[#00AAC1]/15 pb-2">
+                    Financial Breakdown
+                  </h4>
+
+                  <div className="space-y-2.5 text-xs sm:text-sm">
+                    <div className="flex justify-between items-center text-[#4B5563]">
+                      <span>Consultation Fee</span>
+                      <span className="font-semibold text-[#1F2937]">
+                        INR {((selectedProgram.salePrice || selectedProgram.price) / 1.18).toFixed(2)}
+                      </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-secondaryText">GST (18% inclusive)</span>
-                      <span style={{ color: '#176F78', fontWeight: 600 }}>INR {((selectedProgram.salePrice || selectedProgram.price) - ((selectedProgram.salePrice || selectedProgram.price) / 1.18)).toFixed(2)}</span>
+                    <div className="flex justify-between items-center text-[#4B5563]">
+                      <span>GST (18% inclusive)</span>
+                      <span className="font-[#1F2937] font-semibold">
+                        INR {((selectedProgram.salePrice || selectedProgram.price) - ((selectedProgram.salePrice || selectedProgram.price) / 1.18)).toFixed(2)}
+                      </span>
                     </div>
-                  </div>
-                  <div className="flex justify-between items-baseline font-bold">
-                    <span className="text-base" style={{ color: '#176F78' }}>Total Charge</span>
-                    <span className="text-2xl font-serif" style={{ color: '#008B8B' }}>INR {selectedProgram.salePrice || selectedProgram.price}</span>
                   </div>
 
-                  <button
-                    onClick={handleBookingSubmit}
-                    disabled={submitLoading}
-                    className="btn btn-primary w-full text-center py-4 flex items-center justify-center gap-2 shadow-md"
-                  >
-                    {submitLoading ? (
-                      <span className="flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                        Initializing secure checkout...
-                      </span>
-                    ) : (
-                      <>
-                        <CreditCard className="w-5 h-5" /> Proceed to Secure Payment
-                      </>
-                    )}
-                  </button>
+                  <div className="pt-3 border-t border-[#00AAC1]/15 flex justify-between items-center">
+                    <div>
+                      <span className="text-xs font-bold text-[#1F2937] block">Total Charge</span>
+                      <span className="text-[10px] font-bold text-[#00AAC1] uppercase">Inclusive of all taxes</span>
+                    </div>
+                    <span className="font-serif text-2xl sm:text-3xl font-bold text-[#00AAC1]">
+                      INR {selectedProgram.salePrice || selectedProgram.price}
+                    </span>
+                  </div>
+
+                  {/* Payment CTA Button */}
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={handleBookingSubmit}
+                      disabled={submitLoading}
+                      className="w-full py-4 px-6 rounded-full font-sans text-sm sm:text-base font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] transition-all shadow-md hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    >
+                      {submitLoading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Initializing Checkout...</span>
+                        </span>
+                      ) : (
+                        <>
+                          <CreditCard className="w-5 h-5 text-white shrink-0" />
+                          <span>Proceed to Payment</span>
+                          <ArrowRight className="w-4 h-4 shrink-0" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Security & Trust Credentials */}
+                  <div className="pt-2 flex items-center justify-center gap-3 text-[11px] text-[#6B7280] border-t border-[#00AAC1]/15">
+                    <div className="flex items-center gap-1">
+                      <Lock className="w-3.5 h-3.5 text-[#00AAC1]" />
+                      <span>256-Bit SSL</span>
+                    </div>
+                    <span>•</span>
+                    <div className="flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#006B7D]" />
+                      <span>Razorpay Verified</span>
+                    </div>
+                  </div>
+
                 </div>
 
               </div>
 
               {!submitLoading && (
-                <div className="flex justify-start pt-8 border-t" style={{ borderColor: 'rgba(64,192,192,0.12)' }}>
-                  <button onClick={handlePrevStep} className="btn btn-outline px-6">
-                    <ArrowLeft className="mr-2 w-4 h-4" /> Back
+                <div className="flex justify-start pt-8 border-t border-slate-100">
+                  <button 
+                    onClick={handlePrevStep} 
+                    className="px-6 py-3 rounded-full border-2 border-[#00AAC1] font-sans text-xs sm:text-sm font-bold text-[#00AAC1] hover:bg-[#EBF7F7] transition-all flex items-center gap-2 cursor-pointer"
+                  >
+                    <ArrowLeft className="w-4 h-4" /> Back to Details
                   </button>
                 </div>
               )}
@@ -592,3 +751,4 @@ export default function Booking() {
     </BackgroundWrapper>
   );
 }
+
