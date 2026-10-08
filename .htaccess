@@ -1,13 +1,13 @@
 # =====================================================================
-# cPanel Production Apache Configuration - Suyog Saanidhya
+# GoDaddy Shared Hosting Apache Configuration - Suyog Saanidhya
 # Domain: suyogsaanidhya.com
 # =====================================================================
 
-# 1. Directory Indexing & Options
+# Enable Directory Indexing
 DirectoryIndex index.html Index.html index.php
 Options +FollowSymLinks -Indexes
 
-# 2. Grant explicit file read access to bypass cPanel 403 Forbidden errors
+# Bypass GoDaddy file access restrictions
 <FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot|json|html|txt|xml)$">
   <IfModule mod_authz_core.c>
     Require all granted
@@ -26,21 +26,21 @@ Options +FollowSymLinks -Indexes
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # Direct pass-through for existing files or directories
+  # Pass-through existing physical files or directories
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Allow direct pass-through for Next.js assets
-  RewriteRule ^_next/(.*)$ _next/$1 [L]
-  RewriteRule ^next_assets/(.*)$ next_assets/$1 [L]
+  # Route asset paths directly
+  RewriteRule ^staticassets/(.*)$ staticassets/$1 [L]
   RewriteRule ^assets/(.*)$ assets/$1 [L]
+  RewriteRule ^next_assets/(.*)$ next_assets/$1 [L]
 
-  # Clean HTML extension rewrite (e.g. /about -> /about.html)
+  # Clean HTML route rewrites (e.g. /about -> /about.html)
   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
   RewriteRule ^(.*)$ /$1.html [L]
 
-  # SPA / Next.js Static Export Fallback
+  # SPA Static Fallback
   RewriteRule ^ index.html [L]
 </IfModule>
 
@@ -52,7 +52,7 @@ Options +FollowSymLinks -Indexes
   Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
-# GZIP Compression
+# Deflate GZIP Compression
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
   AddOutputFilterByType DEFLATE application/javascript application/x-javascript
@@ -60,7 +60,7 @@ Options +FollowSymLinks -Indexes
   AddOutputFilterByType DEFLATE image/svg+xml font/opentype font/otf font/ttf
 </IfModule>
 
-# Browser Caching
+# Browser Cache Control
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 month"

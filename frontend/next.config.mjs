@@ -8,6 +8,7 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
+  assetPrefix: '.',
   images: {
     unoptimized: true,
   },
