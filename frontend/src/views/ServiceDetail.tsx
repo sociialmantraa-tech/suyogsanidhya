@@ -13,7 +13,7 @@ import Button from '../components/Button';
 
 const SectionReveal = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const inView = useInView(ref, { once: true, margin: '0px' });
   const prefersReducedMotion = typeof window !== 'undefined'
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
     : false;
@@ -21,9 +21,9 @@ const SectionReveal = ({ children, className = '', delay = 0 }: { children: Reac
   return (
     <motion.div
       ref={ref}
-      initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay }}
+      initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay }}
       className={className}
     >
       {children}
@@ -206,11 +206,19 @@ export default function ServiceDetail() {
             >
               <span className="eyebrow-label uppercase tracking-widest block" style={{ color: '#C9A646' }}>Session Cost</span>
               <div className="flex items-baseline gap-3">
-                <span className="font-sans text-[24px] font-bold text-[#166D74]">
-                  {service.sale_price ? `INR ${service.sale_price}` : `INR ${service.price}`}
-                </span>
-                {service.sale_price && (
-                  <span className="line-through text-[12px] font-medium decoration-1" style={{ color: '#88949B' }}>INR {service.price}</span>
+                {service.price && service.price > 0 ? (
+                  <>
+                    <span className="font-sans text-[24px] font-bold text-[#166D74]">
+                      {service.sale_price ? `INR ${service.sale_price}` : `INR ${service.price}`}
+                    </span>
+                    {service.sale_price && (
+                      <span className="line-through text-[12px] font-medium decoration-1" style={{ color: '#88949B' }}>INR {service.price}</span>
+                    )}
+                  </>
+                ) : (
+                  <span className="font-sans text-xl font-bold text-[#166D74]">
+                    {service.price_text || "To Be Confirmed"}
+                  </span>
                 )}
               </div>
 

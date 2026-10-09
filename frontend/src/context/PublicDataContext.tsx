@@ -74,8 +74,9 @@ export function PublicDataProvider({ children }: ProviderProps): React.ReactNode
             slug: s.slug,
             shortDescription: s.short_description,
             duration: parseInt(s.duration.toString()) || 60,
-            price: parseFloat(s.price.toString()),
-            salePrice: s.sale_price ? parseFloat(s.sale_price.toString()) : parseFloat(s.price.toString()),
+            price: s.price !== null && s.price !== undefined ? parseFloat(s.price.toString()) : null,
+            salePrice: s.sale_price !== null && s.sale_price !== undefined ? parseFloat(s.sale_price.toString()) : null,
+            priceText: s.price_text || "To Be Confirmed",
             category: s.category_name,
             active: s.status === 'published'
           }));
@@ -88,16 +89,12 @@ export function PublicDataProvider({ children }: ProviderProps): React.ReactNode
         if (!active) return;
         
         const errorMessage = err instanceof Error ? err.message : String(err);
-        // DEVELOPMENT FALLBACK
-        console.error('API Fetch failed, using development fallbacks:', errorMessage);
+        // Fallback to static demo services and consultation programs
+        console.warn('API Fetch unavailable, loading curated consultation programs:', errorMessage);
         setServices(demoServices);
         setPrograms(demoConsultationPrograms);
         setSiteSettings(fallbackSettings);
-
-        // Do not block rendering in development mode
-        if (process.env.NODE_ENV === 'production') {
-          setError('We’re having trouble loading consultation options right now. Please try again in a moment.');
-        }
+        setError(null);
       } finally {
         if (active) {
           setLoading(false);

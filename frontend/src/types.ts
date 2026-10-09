@@ -9,8 +9,9 @@ export interface Service {
   image: string;
   icon: string;
   duration: number;
-  price: number;
-  sale_price: number;
+  price: number | null;
+  sale_price: number | null;
+  price_text?: string;
   display_order: number;
   status: string;
   seo_title: string;
@@ -36,8 +37,9 @@ export interface Program {
   slug: string;
   shortDescription: string;
   duration: number;
-  price: number;
-  salePrice: number;
+  price: number | null;
+  salePrice: number | null;
+  priceText?: string;
   category: string;
   active: boolean;
 }

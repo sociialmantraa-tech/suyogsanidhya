@@ -53,8 +53,8 @@ export default function Services() {
             </p>
           </div>
 
-          {/* Services Grid (All visible immediately without blocking) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Services Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-8">
             {services.map((service: Service, idx: number) => (
               <motion.div
                 key={service.id || idx}
@@ -93,14 +93,18 @@ export default function Services() {
                       <Clock className="w-3.5 h-3.5 text-[#00AAC1]" />
                       {service.duration || 60} mins
                     </span>
-                    <span className="font-sans text-base font-bold text-[#00AAC1]">
-                      {service.sale_price ? (
-                        <>
-                          <span className="line-through text-xs font-medium mr-1 text-slate-400">INR {service.price}</span>
-                          INR {service.sale_price}
-                        </>
+                    <span className="font-sans text-xs sm:text-sm font-bold text-[#00AAC1]">
+                      {service.price && service.price > 0 ? (
+                        service.sale_price ? (
+                          <>
+                            <span className="line-through text-xs font-medium mr-1 text-slate-400">INR {service.price}</span>
+                            INR {service.sale_price}
+                          </>
+                        ) : (
+                          `INR ${service.price}`
+                        )
                       ) : (
-                        `INR ${service.price || 4999}`
+                        service.price_text || "To Be Confirmed"
                       )}
                     </span>
                   </div>

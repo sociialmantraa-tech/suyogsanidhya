@@ -12,13 +12,13 @@ import { Program } from '../types';
 
 const SectionReveal = ({ children, className = '', delay = 0, style = {} }: { children: React.ReactNode; className?: string; delay?: number; style?: React.CSSProperties }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const inView = useInView(ref, { once: true, margin: '0px' });
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay }}
       className={className}
       style={style}
     >
@@ -114,8 +114,8 @@ export default function Booking() {
 
   const getMinDate = () => {
     const today = new Date();
-    // Booking calendar operational start date: 08th November
-    const startAvailableDate = new Date(today.getFullYear(), 10, 8); // Month 10 = November (0-indexed)
+    // Booking calendar operational start date: 01st December 2026
+    const startAvailableDate = new Date(today.getFullYear(), 11, 1); // Month 11 = December (0-indexed)
     
     const targetDate = today < startAvailableDate ? startAvailableDate : today;
     const year = targetDate.getFullYear();
@@ -144,24 +144,76 @@ export default function Booking() {
     return `${displayHour}:${min} ${ampm}`;
   };
 
-  const validateInfoStep = () => {
-    const errors: Record<string, string> = {};
-    if (!customerInfo.name.trim()) {
-      errors.name = "Full name is required.";
-    }
-    if (!customerInfo.email.trim()) {
-      errors.email = "Email address is required.";
-    } else if (!/\S+@\S+\.\S+/.test(customerInfo.email)) {
-      errors.email = "Please provide a valid email address.";
-    }
-    if (!customerInfo.phone.trim()) {
-      errors.phone = "Phone number is required.";
-    } else if (!/^\d{7,15}$/.test(customerInfo.phone.trim().replace(/[-\s]/g, ''))) {
-      errors.phone = "Please enter a valid phone number (7 to 15 digits).";
-    }
+  const validateSingleField = (field: 'name' | 'email' | 'phone', value?: string) => {
+    setFormErrors(prev => {
+      const newErrors = { ...prev };
 
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+      if (field === 'name') {
+        const cleanName = (value !== undefined ? value : customerInfo.name).trim();
+        if (!cleanName) {
+          newErrors.name = "Full name is required.";
+        } else if (cleanName.length < 2) {
+          newErrors.name = "Name must be at least 2 characters.";
+        } else if (!/^[a-zA-Z\s'.-]+$/.test(cleanName)) {
+          newErrors.name = "Name should only contain letters and spaces.";
+        } else {
+          delete newErrors.name;
+        }
+      }
+
+      if (field === 'email') {
+        const cleanEmail = (value !== undefined ? value : customerInfo.email).trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!cleanEmail) {
+          newErrors.email = "Email address is required.";
+        } else if (!emailRegex.test(cleanEmail)) {
+          newErrors.email = "Please enter a valid email address (e.g. user@domain.com).";
+        } else {
+          delete newErrors.email;
+        }
+      }
+
+      if (field === 'phone') {
+        const cleanPhone = (value !== undefined ? value : customerInfo.phone).trim().replace(/[-\s]/g, '');
+        const isIndia = customerInfo.countryCode.trim() === '+91' || customerInfo.countryCode.trim() === '91';
+
+        if (!cleanPhone) {
+          newErrors.phone = "Phone number is required.";
+        } else if (isIndia) {
+          if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+            newErrors.phone = "Indian phone number must be exactly 10 digits starting with 6, 7, 8, or 9.";
+          } else {
+            delete newErrors.phone;
+          }
+        } else {
+          if (!/^\d{7,15}$/.test(cleanPhone)) {
+            newErrors.phone = "Please enter a valid phone number (7 to 15 digits).";
+          } else {
+            delete newErrors.phone;
+          }
+        }
+      }
+
+      return newErrors;
+    });
+  };
+
+  const validateInfoStep = () => {
+    validateSingleField('name');
+    validateSingleField('email');
+    validateSingleField('phone');
+
+    const cleanName = customerInfo.name.trim();
+    const cleanEmail = customerInfo.email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const cleanPhone = customerInfo.phone.trim().replace(/[-\s]/g, '');
+    const isIndia = customerInfo.countryCode.trim() === '+91' || customerInfo.countryCode.trim() === '91';
+
+    const hasNameErr = !cleanName || cleanName.length < 2 || !/^[a-zA-Z\s'.-]+$/.test(cleanName);
+    const hasEmailErr = !cleanEmail || !emailRegex.test(cleanEmail);
+    const hasPhoneErr = !cleanPhone || (isIndia ? !/^[6-9]\d{9}$/.test(cleanPhone) : !/^\d{7,15}$/.test(cleanPhone));
+
+    return !hasNameErr && !hasEmailErr && !hasPhoneErr;
   };
 
   const handleNextStep = () => {
@@ -362,8 +414,10 @@ export default function Booking() {
                         </div>
                       </div>
                       <div className="text-right shrink-0 self-end md:self-center">
-                        <span className="font-serif text-xl font-bold text-[#00AAC1]">
-                          INR {prog.salePrice || prog.price}
+                        <span className="font-serif text-base sm:text-lg font-bold text-[#00AAC1]">
+                          {prog.price && prog.price > 0
+                            ? `INR ${prog.salePrice || prog.price}`
+                            : prog.priceText || "To Be Confirmed"}
                         </span>
                       </div>
                     </div>
@@ -408,7 +462,7 @@ export default function Booking() {
                       Select Date
                     </label>
                     <span className="text-[10px] font-sans font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EBF7F7] text-[#00AAC1] border border-[#00AAC1]/20">
-                      Available from 8th Nov
+                      Available from 1st Dec
                     </span>
                   </div>
                   <input
@@ -420,7 +474,7 @@ export default function Booking() {
                     className="w-full border border-[#00AAC1]/25 p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-xl font-sans text-sm bg-white text-[#1F2937] font-medium shadow-xs transition-all"
                   />
                   <p className="text-[11px] font-sans text-[#6B7280]">
-                    * Consultation calendar opens for session bookings starting 8th November 2026.
+                    * Consultation calendar opens for session bookings starting 1st December 2026.
                   </p>
                 </div>
 
@@ -508,13 +562,18 @@ export default function Booking() {
                   <input
                     type="text"
                     value={customerInfo.name}
-                    onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
+                    onBlur={() => validateSingleField('name')}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setCustomerInfo(prev => ({ ...prev, name: val }));
+                      if (formErrors.name) validateSingleField('name', val);
+                    }}
                     className={`w-full border p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-xl text-sm transition-all shadow-xs bg-white ${
                       formErrors.name ? 'border-red-500' : 'border-[#00AAC1]/25'
                     }`}
-                    placeholder="e.g. Rahul Sharma"
+                    placeholder="Enter full name"
                   />
-                  {formErrors.name && <p className="text-red-500 text-[11px] mt-1">{formErrors.name}</p>}
+                  {formErrors.name && <p className="text-red-500 text-[11px] mt-1 font-semibold">{formErrors.name}</p>}
                 </div>
                 
                 <div className="space-y-2">
@@ -524,13 +583,18 @@ export default function Booking() {
                   <input
                     type="email"
                     value={customerInfo.email}
-                    onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
+                    onBlur={() => validateSingleField('email')}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setCustomerInfo(prev => ({ ...prev, email: val }));
+                      if (formErrors.email) validateSingleField('email', val);
+                    }}
                     className={`w-full border p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-xl text-sm transition-all shadow-xs bg-white ${
                       formErrors.email ? 'border-red-500' : 'border-[#00AAC1]/25'
                     }`}
-                    placeholder="name@domain.com"
+                    placeholder="Enter email address"
                   />
-                  {formErrors.email && <p className="text-red-500 text-[11px] mt-1">{formErrors.email}</p>}
+                  {formErrors.email && <p className="text-red-500 text-[11px] mt-1 font-semibold">{formErrors.email}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -541,20 +605,30 @@ export default function Booking() {
                     <input
                       type="text"
                       value={customerInfo.countryCode}
-                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, countryCode: e.target.value }))}
+                      onChange={(e) => {
+                        const code = e.target.value;
+                        setCustomerInfo(prev => ({ ...prev, countryCode: code }));
+                        if (formErrors.phone) validateSingleField('phone');
+                      }}
                       className="w-16 border border-r-0 border-[#00AAC1]/25 p-3.5 focus:outline-none focus:border-[#00AAC1] rounded-l-xl text-sm text-center font-bold text-[#00AAC1] bg-[#EBF7F7]"
                     />
                     <input
                       type="tel"
                       value={customerInfo.phone}
-                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
+                      maxLength={customerInfo.countryCode.trim() === '+91' || customerInfo.countryCode.trim() === '91' ? 10 : 15}
+                      onBlur={() => validateSingleField('phone')}
+                      onChange={(e) => {
+                        const digitsOnly = e.target.value.replace(/\D/g, '');
+                        setCustomerInfo(prev => ({ ...prev, phone: digitsOnly }));
+                        if (formErrors.phone) validateSingleField('phone', digitsOnly);
+                      }}
                       className={`w-full border border-l-0 p-3.5 focus:outline-none focus:border-[#00AAC1] focus:ring-2 focus:ring-[#00AAC1]/20 rounded-r-xl text-sm transition-all shadow-xs bg-white ${
                         formErrors.phone ? 'border-red-500' : 'border-[#00AAC1]/25'
                       }`}
-                      placeholder="9819000000"
+                      placeholder={customerInfo.countryCode.trim() === '+91' ? "10-digit mobile number" : "Enter phone number"}
                     />
                   </div>
-                  {formErrors.phone && <p className="text-red-500 text-[11px] mt-1">{formErrors.phone}</p>}
+                  {formErrors.phone && <p className="text-red-500 text-[11px] mt-1 font-semibold">{formErrors.phone}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
@@ -579,13 +653,13 @@ export default function Booking() {
               <div className="flex justify-between items-center pt-8 border-t border-slate-100">
                 <button 
                   onClick={handlePrevStep} 
-                  className="px-6 py-3 rounded-full border-2 border-[#00AAC1] font-sans text-xs sm:text-sm font-bold text-[#00AAC1] hover:bg-[#EBF7F7] transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-6 py-3 rounded-full border-2 border-[#00AAC1] font-sans text-xs sm:text-sm font-bold text-[#00AAC1] hover:bg-[#EBF7F7] transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap"
                 >
                   <ArrowLeft className="w-4 h-4" /> Back
                 </button>
                 <button 
                   onClick={handleNextStep}
-                  className="px-8 py-3.5 rounded-full font-sans text-xs sm:text-sm font-bold text-white shadow-md bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] hover:scale-[1.02] transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-xl"
+                  className="px-8 py-3.5 rounded-full font-sans text-xs sm:text-sm font-bold text-white shadow-md bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] hover:scale-[1.02] transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-xl whitespace-nowrap"
                 >
                   <span>Review &amp; Pay</span>
                   <ArrowRight className="w-4 h-4" />
@@ -611,7 +685,7 @@ export default function Booking() {
                   <div className="bg-[#F4F8F8] p-6 rounded-2xl border border-[#00AAC1]/20 space-y-3">
                     <div className="flex items-center justify-between border-b border-[#00AAC1]/15 pb-2">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-[#006B7D]">Schedule Summary</h4>
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#00AAC1] border border-[#00AAC1]/20">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#00AAC1] border border-[#00AAC1]/20 whitespace-nowrap">
                         Confirmed Slot
                       </span>
                     </div>
@@ -668,28 +742,41 @@ export default function Booking() {
                   </h4>
 
                   <div className="space-y-2.5 text-xs sm:text-sm">
-                    <div className="flex justify-between items-center text-[#4B5563]">
-                      <span>Consultation Fee</span>
-                      <span className="font-semibold text-[#1F2937]">
-                        INR {((selectedProgram.salePrice || selectedProgram.price) / 1.18).toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-[#4B5563]">
-                      <span>GST (18% inclusive)</span>
-                      <span className="font-[#1F2937] font-semibold">
-                        INR {((selectedProgram.salePrice || selectedProgram.price) - ((selectedProgram.salePrice || selectedProgram.price) / 1.18)).toFixed(2)}
-                      </span>
-                    </div>
+                    {selectedProgram.price && selectedProgram.price > 0 ? (
+                      <>
+                        <div className="flex justify-between items-center text-[#4B5563]">
+                          <span>Consultation Fee</span>
+                          <span className="font-semibold text-[#1F2937] whitespace-nowrap">
+                            INR {(((selectedProgram.salePrice || selectedProgram.price) ?? 0) / 1.18).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center text-[#4B5563]">
+                          <span>GST (18% inclusive)</span>
+                          <span className="font-[#1F2937] font-semibold whitespace-nowrap">
+                            INR {(((selectedProgram.salePrice || selectedProgram.price) ?? 0) - (((selectedProgram.salePrice || selectedProgram.price) ?? 0) / 1.18)).toFixed(2)}
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex justify-between items-center text-[#4B5563]">
+                        <span>Consultation Fee</span>
+                        <span className="font-semibold text-[#00AAC1] whitespace-nowrap">To Be Confirmed</span>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="pt-3 border-t border-[#00AAC1]/15 flex justify-between items-center">
-                    <div>
-                      <span className="text-xs font-bold text-[#1F2937] block">Total Charge</span>
-                      <span className="text-[10px] font-bold text-[#00AAC1] uppercase">Inclusive of all taxes</span>
+                  <div className="pt-3.5 border-t border-[#00AAC1]/15 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs sm:text-sm font-bold text-[#1F2937]">Total Charge</span>
+                      <span className="font-serif text-base sm:text-lg font-bold text-[#00AAC1] whitespace-nowrap">
+                        {selectedProgram.price && selectedProgram.price > 0
+                          ? `INR ${selectedProgram.salePrice || selectedProgram.price}`
+                          : "To Be Confirmed"}
+                      </span>
                     </div>
-                    <span className="font-serif text-2xl sm:text-3xl font-bold text-[#00AAC1]">
-                      INR {selectedProgram.salePrice || selectedProgram.price}
-                    </span>
+                    <p className="text-[10px] font-bold text-[#00AAC1] uppercase tracking-wider">
+                      {selectedProgram.price && selectedProgram.price > 0 ? "Inclusive of all taxes" : "Will be confirmed upon request"}
+                    </p>
                   </div>
 
                   {/* Payment CTA Button */}
@@ -698,17 +785,17 @@ export default function Booking() {
                       type="button"
                       onClick={handleBookingSubmit}
                       disabled={submitLoading}
-                      className="w-full py-4 px-6 rounded-full font-sans text-sm sm:text-base font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] transition-all shadow-md hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      className="w-full py-3.5 px-4 rounded-full font-sans text-sm font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] transition-all shadow-md hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 whitespace-nowrap"
                     >
                       {submitLoading ? (
-                        <span className="flex items-center justify-center gap-2">
+                        <span className="flex items-center justify-center gap-2 whitespace-nowrap">
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           <span>Initializing Checkout...</span>
                         </span>
                       ) : (
                         <>
                           <CreditCard className="w-5 h-5 text-white shrink-0" />
-                          <span>Proceed to Payment</span>
+                          <span className="whitespace-nowrap">Proceed to Payment</span>
                           <ArrowRight className="w-4 h-4 shrink-0" />
                         </>
                       )}

@@ -216,9 +216,9 @@ export default function Header() {
           >
             <Link
               href="/book"
-              className="relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full font-sans text-[14px] font-bold tracking-wide text-white overflow-hidden shadow-[0_4px_18px_rgba(0,170,193,0.32)] hover:shadow-[0_8px_30px_rgba(0,170,193,0.45)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F]"
+              className="relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full font-sans text-[14px] font-bold tracking-wide text-white overflow-hidden shadow-[0_4px_18px_rgba(0,170,193,0.32)] hover:shadow-[0_8px_30px_rgba(0,170,193,0.45)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] whitespace-nowrap"
             >
-              <span>Book Consultation</span>
+              <span className="whitespace-nowrap">Book Consultation</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 text-white" />
             </Link>
           </motion.div>

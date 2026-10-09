@@ -196,7 +196,7 @@ export default function Contact() {
                     onChange={handleChange}
                     className="w-full border p-3.5 focus:outline-none focus:border-[#40C0C0] rounded-xl text-sm transition-all shadow-sm"
                     style={{ backgroundColor: '#FFFDF7', borderColor: 'rgba(64,192,192,0.2)' }}
-                    placeholder="name@domain.com"
+                    placeholder="Enter email address"
                   />
                 </div>
               </div>
