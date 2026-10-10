@@ -42,10 +42,11 @@ function replaceInDir(dir) {
     } else if (item.isFile() && /\.(html|js|css|json|txt|svg|map)$/i.test(item.name)) {
       try {
         let content = fs.readFileSync(fullPath, 'utf8');
-        if (content.includes('_next')) {
+        if (content.includes('_next') || content.includes('staticassets/staticassets')) {
           content = content
+            .replace(/\/staticassets\/staticassets\//g, '/staticassets/')
             .replace(/\/_next\//g, '/staticassets/')
-            .replace(/\.\/_next\//g, './staticassets/')
+            .replace(/\.\/_next\//g, '/staticassets/')
             .replace(/"_next\//g, '"staticassets/')
             .replace(/'_next\//g, "'staticassets/")
             .replace(/\/_next"/g, '/staticassets"')
