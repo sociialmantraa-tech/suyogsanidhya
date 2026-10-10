@@ -18,7 +18,7 @@ export default function WhatsAppFloating() {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-50 flex items-center gap-3">
+    <div className="fixed bottom-20 right-5 md:bottom-8 md:right-8 z-50 flex items-center gap-3">
       <AnimatePresence>
         {isHovered && (
           <motion.div

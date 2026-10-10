@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import logoImg from '../assets/logo.png';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,10 +12,15 @@ import { usePublicData } from '../context/PublicDataContext';
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { services } = usePublicData();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const logoSrc = typeof logoImg === 'string' ? logoImg : (logoImg as any)?.src || logoImg;
 
@@ -138,7 +144,7 @@ export default function Header() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
 
-        {/* Brand Logo - Original High-Resolution Logo with Prominent Presentation */}
+        {/* Brand Logo - Responsive High-Resolution Logo */}
         <Link href="/" className="focus:outline-none flex items-center py-1 group shrink-0" aria-label="Suyog Saanidhya — Home">
           <motion.div
             className="relative flex items-center"
@@ -148,12 +154,10 @@ export default function Header() {
             <img
               src={logoSrc}
               alt="Suyog Saanidhya — Where Hearts Find Harmony"
-              className="object-contain transition-all duration-300 h-[58px] sm:h-[76px] md:h-[94px]"
+              className={`object-contain transition-all duration-300 w-auto max-w-[240px] sm:max-w-[340px] md:max-w-[480px] ${
+                isScrolled ? 'h-[44px] sm:h-[58px] md:h-[72px]' : 'h-[52px] sm:h-[72px] md:h-[92px]'
+              }`}
               style={{
-                height: isScrolled ? '70px' : '94px',
-                maxHeight: isScrolled ? '70px' : '94px',
-                width: 'auto',
-                maxWidth: isScrolled ? '360px' : '480px',
                 display: 'block',
                 imageRendering: '-webkit-optimize-contrast',
                 filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.06))'
@@ -244,124 +248,133 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 bg-black/25 backdrop-blur-sm z-40 lg:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={toggleMenu}
-            />
+      {/* Mobile Drawer (Portaled to document.body to avoid header backdrop-filter clip) */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998] md:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={toggleMenu}
+              />
 
-            {/* Slide-in Drawer */}
-            <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-[380px] z-50 lg:hidden flex flex-col justify-between shadow-2xl overflow-hidden bg-white"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {/* Drawer Header */}
-              <div className="p-4 flex items-center justify-between border-b border-[rgba(0,170,193,0.1)] bg-white">
-                <Link href="/" onClick={toggleMenu} className="flex items-center">
-                  <img
-                    src={logoSrc}
-                    alt="Suyog Saanidhya"
-                    className="object-contain"
-                    style={{
-                      height: '48px',
-                      maxHeight: '48px',
-                      width: 'auto',
-                      maxWidth: '220px',
-                      display: 'block',
-                      imageRendering: '-webkit-optimize-contrast'
-                    }}
-                  />
-                </Link>
-                <button
-                  onClick={toggleMenu}
-                  className="p-2 rounded-full hover:bg-slate-100 text-[#00AAC1] transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Navigation Links */}
-              <div className="p-6 flex-1 overflow-y-auto space-y-6">
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block px-2 mb-1">
-                    Navigation
-                  </span>
-                  {navLinks.map((link, i) => (
-                    <motion.div
-                      key={link.href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05, duration: 0.3 }}
-                    >
-                      <Link
-                        href={link.href}
-                        className={`flex items-center justify-between py-2.5 px-3 rounded-xl font-sans text-base transition-colors ${
-                          isActive(link.href)
-                            ? 'bg-[#EBF7F7] text-[#00AAC1] font-bold border border-[#00AAC1]/20'
-                            : 'text-[#4B5563] hover:bg-[#F4F8F8]'
-                        }`}
-                      >
-                        {link.label}
-                        <ArrowRight className="w-4 h-4 opacity-40" />
-                      </Link>
-                    </motion.div>
-                  ))}
+              {/* Slide-in Drawer */}
+              <motion.div
+                className="fixed top-0 right-0 bottom-0 w-[85%] max-w-[360px] z-[9999] md:hidden flex flex-col justify-between shadow-2xl bg-white overflow-hidden"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {/* Drawer Header */}
+                <div className="p-4 px-5 flex items-center justify-between border-b border-[rgba(0,170,193,0.12)] bg-white shrink-0">
+                  <Link href="/" onClick={toggleMenu} className="flex items-center py-0.5">
+                    <img
+                      src={logoSrc}
+                      alt="Suyog Saanidhya"
+                      className="object-contain"
+                      style={{
+                        height: '58px',
+                        maxHeight: '62px',
+                        width: 'auto',
+                        maxWidth: '260px',
+                        display: 'block',
+                        imageRendering: '-webkit-optimize-contrast',
+                        filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.06))'
+                      }}
+                    />
+                  </Link>
+                  <button
+                    onClick={toggleMenu}
+                    className="p-2.5 rounded-full bg-slate-50 hover:bg-slate-100 text-[#00AAC1] border border-[rgba(0,170,193,0.18)] transition-all active:scale-95 shadow-xs"
+                    aria-label="Close menu"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
 
-                {/* Services Section in Drawer */}
-                <div className="pt-4 border-t border-[rgba(0,170,193,0.1)]">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#00AAC1] block px-2 mb-2">
-                    Consultations
-                  </span>
-                  <div className="space-y-1">
-                    <Link
-                      href="/services"
-                      className="flex items-center justify-between py-2 px-3 rounded-xl font-sans text-sm font-semibold text-[#00AAC1] hover:bg-[#F4F8F8]"
-                    >
-                      All Services
-                      <ArrowRight className="w-3.5 h-3.5 text-[#00AAC1]" />
-                    </Link>
-                    {services.slice(0, 5).map(service => (
-                      <Link
-                        key={service.id}
-                        href={`/services/${service.slug}`}
-                        className="block py-1.5 px-3 rounded-lg font-sans text-xs text-[#4B5563] hover:text-[#00AAC1] hover:bg-[#F4F8F8] transition-colors"
+                {/* Navigation Links */}
+                <div className="p-5 flex-1 overflow-y-auto space-y-6">
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#006B7D] block px-2 mb-2">
+                      Navigation
+                    </span>
+                    {navLinks.map((link, i) => (
+                      <motion.div
+                        key={link.href}
+                        initial={{ opacity: 0, x: 15 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.04, duration: 0.25 }}
                       >
-                        {service.title}
-                      </Link>
+                        <Link
+                          href={link.href}
+                          onClick={toggleMenu}
+                          className={`flex items-center justify-between py-3 px-3.5 rounded-xl font-sans text-base transition-colors ${
+                            isActive(link.href)
+                              ? 'bg-[#EBF7F7] text-[#00AAC1] font-bold border border-[#00AAC1]/20'
+                              : 'text-[#374151] hover:bg-[#F4F8F8] font-medium'
+                          }`}
+                        >
+                          <span>{link.label}</span>
+                          <ArrowRight className="w-4 h-4 text-[#00AAC1]/60" />
+                        </Link>
+                      </motion.div>
                     ))}
                   </div>
-                </div>
-              </div>
 
-              {/* Drawer Bottom CTA */}
-              <div className="p-6 border-t border-[rgba(0,170,193,0.1)] bg-white space-y-3">
-                <Link
-                  href="/book"
-                  className="w-full py-3.5 px-4 rounded-full flex items-center justify-center gap-2 font-sans text-sm font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] shadow-md transition-all"
-                >
-                  <span>Book Consultation</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <div className="flex items-center justify-center gap-2 text-[11px] text-[#6B7280]">
-                  <PhoneCall className="w-3.5 h-3.5 text-[#00AAC1]" />
-                  <span>Confidential Sessions Available</span>
+                  {/* Services Section in Drawer */}
+                  <div className="pt-4 border-t border-[rgba(0,170,193,0.1)]">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#00AAC1] block px-2 mb-2">
+                      Consultations
+                    </span>
+                    <div className="space-y-1">
+                      <Link
+                        href="/services"
+                        onClick={toggleMenu}
+                        className="flex items-center justify-between py-2 px-3 rounded-xl font-sans text-sm font-semibold text-[#00AAC1] hover:bg-[#F4F8F8]"
+                      >
+                        <span>All Services</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#00AAC1]" />
+                      </Link>
+                      {services && services.length > 0 && services.slice(0, 5).map(service => (
+                        <Link
+                          key={service.id}
+                          href={`/services/${service.slug}`}
+                          onClick={toggleMenu}
+                          className="block py-2 px-3 rounded-lg font-sans text-xs text-[#4B5563] hover:text-[#00AAC1] hover:bg-[#F4F8F8] transition-colors"
+                        >
+                          {service.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+
+                {/* Drawer Bottom CTA */}
+                <div className="p-5 border-t border-[rgba(0,170,193,0.1)] bg-white space-y-3 shrink-0">
+                  <Link
+                    href="/book"
+                    onClick={toggleMenu}
+                    className="w-full py-3.5 px-4 rounded-full flex items-center justify-center gap-2 font-sans text-sm font-bold text-white bg-gradient-to-r from-[#00C4D9] via-[#00AAC1] to-[#008496] hover:from-[#00D3EA] hover:via-[#00B4C9] hover:to-[#006F7F] shadow-md transition-all active:scale-95"
+                  >
+                    <span>Book Consultation</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <div className="flex items-center justify-center gap-2 text-[11px] text-[#6B7280]">
+                    <PhoneCall className="w-3.5 h-3.5 text-[#00AAC1]" />
+                    <span>Confidential Sessions Available</span>
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </header>
   );
 }
